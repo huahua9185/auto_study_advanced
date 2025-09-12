@@ -1,0 +1,197 @@
+{
+  "test_time": "2025-09-11 15:30:37",
+  "page_info": {
+    "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/tool_box/required?id=275",
+    "title": "宁夏干部教育培训网络学院"
+  },
+  "parsing_results": {
+    "course_count": 22,
+    "courses": [
+      {
+        "course_name": "中国特色社会主义理论体系文献导读（上）",
+        "course_type": "required",
+        "progress": 4.9,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=中国特色社会主义理论体系文献导读（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "中国特色社会主义理论体系文献导读（下）",
+        "course_type": "required",
+        "progress": 0.1,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=中国特色社会主义理论体系文献导读（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "年轻干部如何锤炼过硬的政治素质（上）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=年轻干部如何锤炼过硬的政治素质（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "年轻干部如何锤炼过硬的政治素质（下）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=年轻干部如何锤炼过硬的政治素质（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（上）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（下）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "深入学习中华民族发展史，讲好中华民族共同体故事（一）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=深入学习中华民族发展史，讲好中华民族共同体故事（一）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "深入学习中华民族发展史，讲好中华民族共同体故事（二）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=深入学习中华民族发展史，讲好中华民族共同体故事（二）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "深入学习中华民族发展史，讲好中华民族共同体故事（三）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=深入学习中华民族发展史，讲好中华民族共同体故事（三）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "深入学习中华民族发展史，讲好中华民族共同体故事（四）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=深入学习中华民族发展史，讲好中华民族共同体故事（四）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "提升领导干部防范化解风险本领（上）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=提升领导干部防范化解风险本领（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "提升领导干部防范化解风险本领（中）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=提升领导干部防范化解风险本领（中）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "提升领导干部防范化解风险本领（下）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=提升领导干部防范化解风险本领（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "以新质生产力支撑高质量发展（上）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=以新质生产力支撑高质量发展（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "以新质生产力支撑高质量发展（中）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=以新质生产力支撑高质量发展（中）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "以新质生产力支撑高质量发展（下）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=以新质生产力支撑高质量发展（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "科学实施生态保护修复 提升生态系统多样性、稳定性、持续性（上）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=科学实施生态保护修复 提升生态系统多样性、稳定性、持续性（上）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "科学实施生态保护修复 提升生态系统多样性、稳定性、持续性（下）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=科学实施生态保护修复 提升生态系统多样性、稳定性、持续性（下）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "告别焦虑，停止精神内耗（一）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=告别焦虑，停止精神内耗（一）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "告别焦虑，停止精神内耗（二）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=告别焦虑，停止精神内耗（二）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "告别焦虑，停止精神内耗（四）",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=告别焦虑，停止精神内耗（四）",
+        "user_course_id": ""
+      },
+      {
+        "course_name": "开展安全生产精准执法和帮扶行动",
+        "course_type": "required",
+        "progress": 0.0,
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/#/course_study?name=开展安全生产精准执法和帮扶行动",
+        "user_course_id": ""
+      }
+    ]
+  },
+  "page_elements": {
+    "[class*=\"course\"]": {
+      "count": 28,
+      "sample_text": "课程列表\n专题班考试\n班级通知"
+    }
+  },
+  "navigation": [
+    {
+      "text": "text=选课中心",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=我的学习",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=必修课",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=选修课",
+      "visible": true,
+      "enabled": true
+    }
+  ],
+  "issues_found": [
+    "当前页面似乎是选课工具页面，不是学习页面"
+  ]
+}

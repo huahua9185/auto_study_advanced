@@ -1,0 +1,428 @@
+2025-09-11 16:17:17,084 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 16:17:17,084 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 16:17:17,084 - __main__ - ERROR - 程序初始化失败: 'bool' object is not callable
+2025-09-11 16:17:17,084 - __main__ - INFO - 正在清理资源...
+2025-09-11 16:17:17,084 - __main__ - WARNING - 清理资源时出错: 'LoginManager' object has no attribute 'cleanup'
+2025-09-11 16:19:49,992 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 16:19:49,992 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 16:19:49,992 - __main__ - INFO - 当前未登录，正在执行登录...
+2025-09-11 16:19:49,992 - src.login - INFO - 开始登录流程 (主要尝试 1/3)
+2025-09-11 16:19:49,992 - src.login - INFO - 导航到登录页面
+2025-09-11 16:19:49,992 - src.login - ERROR - 导航到登录页面失败: 'NoneType' object has no attribute 'goto'
+2025-09-11 16:19:49,992 - src.login - INFO - 开始登录流程 (主要尝试 2/3)
+2025-09-11 16:19:49,992 - src.login - INFO - 导航到登录页面
+2025-09-11 16:19:49,992 - src.login - ERROR - 导航到登录页面失败: 'NoneType' object has no attribute 'goto'
+2025-09-11 16:19:49,992 - src.login - INFO - 开始登录流程 (主要尝试 3/3)
+2025-09-11 16:19:49,992 - src.login - INFO - 导航到登录页面
+2025-09-11 16:19:49,992 - src.login - ERROR - 导航到登录页面失败: 'NoneType' object has no attribute 'goto'
+2025-09-11 16:19:49,992 - src.login - ERROR - 所有登录尝试都失败了
+2025-09-11 16:19:49,992 - __main__ - ERROR - 登录失败
+2025-09-11 16:19:49,992 - __main__ - INFO - 正在清理资源...
+2025-09-11 16:19:49,992 - src.login - INFO - 浏览器已关闭
+2025-09-11 16:19:49,992 - __main__ - INFO - 资源清理完成
+2025-09-11 16:23:07,622 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 16:23:07,622 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 16:23:08,607 - src.login - INFO - 浏览器初始化成功
+2025-09-11 16:23:08,607 - __main__ - INFO - 当前未登录，正在执行登录...
+2025-09-11 16:23:08,607 - src.login - INFO - 开始登录流程 (主要尝试 1/3)
+2025-09-11 16:23:08,607 - src.login - INFO - 导航到登录页面
+2025-09-11 16:23:18,697 - src.login - INFO - 点击登录按钮成功: text=登录
+2025-09-11 16:23:18,697 - src.login - INFO - 验证码尝试 1/5
+2025-09-11 16:23:19,104 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 16:23:20,502 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 16:23:21,523 - src.login - INFO - 开始智能验证码处理
+2025-09-11 16:23:21,537 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:21,543 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 16:23:21,543 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 16:23:21,543 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 16:23:21,588 - src.captcha_solver - WARNING - 识别结果长度不足: 350 (3位)
+2025-09-11 16:23:21,588 - src.captcha_solver - INFO - 验证码识别结果: 350 -> 
+2025-09-11 16:23:21,618 - src.captcha_solver - WARNING - 识别结果长度不足: 350 (3位)
+2025-09-11 16:23:21,619 - src.captcha_solver - INFO - 验证码识别结果: 350 -> 
+2025-09-11 16:23:21,619 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 16:23:21,619 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 16:23:23,799 - src.captcha_solver - WARNING - 识别结果长度不足: 997 (3位)
+2025-09-11 16:23:23,799 - src.captcha_solver - INFO - 验证码识别结果: q97 -> 
+2025-09-11 16:23:23,828 - src.captcha_solver - WARNING - 识别结果长度不足: 997 (3位)
+2025-09-11 16:23:23,828 - src.captcha_solver - INFO - 验证码识别结果: q97 -> 
+2025-09-11 16:23:23,828 - src.captcha_solver - INFO - 验证码识别尝试 3/3
+2025-09-11 16:23:23,828 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 16:23:26,006 - src.captcha_solver - INFO - 验证码识别结果: 222q -> 2229
+2025-09-11 16:23:26,006 - src.captcha_solver - INFO - 识别结果: 2229
+2025-09-11 16:23:26,006 - src.login - INFO - 开始填写验证码
+2025-09-11 16:23:26,688 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:28,032 - src.login - INFO - 验证码输入完成: 2229
+2025-09-11 16:23:29,071 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 16:23:29,528 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 16:23:30,097 - src.login - ERROR - 登录失败: 校验码错误
+2025-09-11 16:23:30,097 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 16:23:30,097 - src.login - INFO - 验证码尝试 2/5
+2025-09-11 16:23:30,451 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 16:23:31,647 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 16:23:32,462 - src.login - INFO - 开始智能验证码处理
+2025-09-11 16:23:32,473 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:32,482 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 16:23:32,482 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 16:23:32,482 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 16:23:32,522 - src.captcha_solver - WARNING - 识别结果长度不足: 395 (3位)
+2025-09-11 16:23:32,522 - src.captcha_solver - INFO - 验证码识别结果: 3q5 -> 
+2025-09-11 16:23:32,552 - src.captcha_solver - WARNING - 识别结果长度不足: 395 (3位)
+2025-09-11 16:23:32,552 - src.captcha_solver - INFO - 验证码识别结果: 3q5 -> 
+2025-09-11 16:23:32,552 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 16:23:32,552 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 16:23:34,733 - src.captcha_solver - INFO - 验证码识别结果: 22q9 -> 2299
+2025-09-11 16:23:34,733 - src.captcha_solver - INFO - 识别结果: 2299
+2025-09-11 16:23:34,733 - src.login - INFO - 开始填写验证码
+2025-09-11 16:23:35,408 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:36,750 - src.login - INFO - 验证码输入完成: 2299
+2025-09-11 16:23:37,784 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 16:23:38,252 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 16:23:38,810 - src.login - ERROR - 登录失败: 校验码错误
+2025-09-11 16:23:38,810 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 16:23:38,810 - src.login - INFO - 验证码尝试 3/5
+2025-09-11 16:23:39,159 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 16:23:40,344 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 16:23:41,164 - src.login - INFO - 开始智能验证码处理
+2025-09-11 16:23:41,178 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:41,186 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 16:23:41,186 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 16:23:41,186 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 16:23:41,251 - src.captcha_solver - INFO - 验证码识别结果: 4802 -> 4802
+2025-09-11 16:23:41,251 - src.captcha_solver - INFO - 识别结果: 4802
+2025-09-11 16:23:41,251 - src.login - INFO - 开始填写验证码
+2025-09-11 16:23:41,917 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:43,263 - src.login - INFO - 验证码输入完成: 4802
+2025-09-11 16:23:44,303 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 16:23:44,759 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 16:23:45,332 - src.login - ERROR - 登录失败: 校验码错误
+2025-09-11 16:23:45,332 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 16:23:45,332 - src.login - INFO - 验证码尝试 4/5
+2025-09-11 16:23:45,696 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 16:23:46,889 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 16:23:47,705 - src.login - INFO - 开始智能验证码处理
+2025-09-11 16:23:47,716 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:47,724 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 16:23:47,724 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 16:23:47,724 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 16:23:47,764 - src.captcha_solver - WARNING - 识别结果长度不足: 419 (3位)
+2025-09-11 16:23:47,764 - src.captcha_solver - INFO - 验证码识别结果: 41q -> 
+2025-09-11 16:23:47,794 - src.captcha_solver - WARNING - 识别结果长度不足: 419 (3位)
+2025-09-11 16:23:47,794 - src.captcha_solver - INFO - 验证码识别结果: 41q -> 
+2025-09-11 16:23:47,794 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 16:23:47,794 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 16:23:49,974 - src.captcha_solver - WARNING - 识别结果长度不足: 419 (3位)
+2025-09-11 16:23:49,975 - src.captcha_solver - INFO - 验证码识别结果: 41q -> 
+2025-09-11 16:23:50,003 - src.captcha_solver - WARNING - 识别结果长度不足: 419 (3位)
+2025-09-11 16:23:50,003 - src.captcha_solver - INFO - 验证码识别结果: 41q -> 
+2025-09-11 16:23:50,003 - src.captcha_solver - INFO - 验证码识别尝试 3/3
+2025-09-11 16:23:50,003 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 16:23:52,182 - src.captcha_solver - WARNING - 识别结果长度不足: 959 (3位)
+2025-09-11 16:23:52,182 - src.captcha_solver - INFO - 验证码识别结果: q5q -> 
+2025-09-11 16:23:52,210 - src.captcha_solver - WARNING - 识别结果长度不足: 959 (3位)
+2025-09-11 16:23:52,210 - src.captcha_solver - INFO - 验证码识别结果: q5q -> 
+2025-09-11 16:23:52,210 - src.login - ERROR - 验证码识别或输入失败: 验证码识别失败
+2025-09-11 16:23:53,236 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 16:23:53,691 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 16:23:54,390 - src.login - ERROR - 登录失败: 验证码不允许为空
+2025-09-11 16:23:54,390 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 16:23:54,390 - src.login - INFO - 验证码尝试 5/5
+2025-09-11 16:23:54,751 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 16:23:55,945 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 16:23:56,767 - src.login - INFO - 开始智能验证码处理
+2025-09-11 16:23:56,780 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:56,789 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 16:23:56,789 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 16:23:56,789 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 16:23:56,829 - src.captcha_solver - INFO - 验证码识别结果: c489 -> 6489
+2025-09-11 16:23:56,829 - src.captcha_solver - INFO - 识别结果: 6489
+2025-09-11 16:23:56,829 - src.login - INFO - 开始填写验证码
+2025-09-11 16:23:57,496 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 16:23:58,647 - src.login - INFO - 验证码输入完成: 6489
+2025-09-11 16:23:59,682 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 16:24:00,135 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 16:24:00,854 - src.login - INFO - 登录成功，已进入: text=学习中心
+2025-09-11 16:24:00,854 - src.login - INFO - 登录成功！
+2025-09-11 16:24:00,863 - src.login - INFO - 未找到登录按钮，使用回车键提交
+2025-09-11 16:24:04,060 - src.login - INFO - URL已跳转，登录可能成功
+2025-09-11 16:24:04,061 - src.login - INFO - 登录成功！
+2025-09-11 16:24:04,061 - __main__ - INFO - 登录成功！
+2025-09-11 16:24:04,061 - __main__ - INFO - 开始获取课程信息...
+2025-09-11 16:24:04,061 - src.enhanced_course_parser - INFO - 开始解析必修课程
+2025-09-11 16:24:04,061 - src.enhanced_course_parser - INFO - 访问必修课程页面
+2025-09-11 16:24:07,179 - src.enhanced_course_parser - INFO - 找到 22 个'继续学习'按钮
+2025-09-11 16:24:07,882 - src.enhanced_course_parser - INFO - 必修课解析完成，共获取到 22 门课程
+2025-09-11 16:24:07,882 - src.enhanced_course_parser - INFO - 开始解析选修课程
+2025-09-11 16:24:07,882 - src.enhanced_course_parser - INFO - 访问选修课页面
+2025-09-11 16:24:11,001 - src.enhanced_course_parser - INFO - 找到 18 个表格行
+2025-09-11 16:24:11,649 - src.enhanced_course_parser - INFO - 选修课解析完成，共获取到 18 门课程
+2025-09-11 16:24:11,649 - src.enhanced_course_parser - INFO - 课程解析完成 - 必修课: 22门, 选修课: 18门
+2025-09-11 16:24:11,649 - __main__ - INFO - 成功获取课程信息 - 必修课: 22门, 选修课: 18门, 共计: 40门
+2025-09-11 16:24:11,649 - __main__ - INFO - 自动保存课程信息到数据库...
+2025-09-11 16:24:11,662 - src.enhanced_course_parser - INFO - 成功保存 40 门课程到数据库
+2025-09-11 16:24:11,662 - __main__ - INFO - 课程信息保存成功
+2025-09-11 16:24:11,662 - __main__ - INFO - 开始自动学习流程
+2025-09-11 16:24:11,662 - __main__ - INFO - 发现 39 门未完成的课程，开始学习
+2025-09-11 16:24:11,662 - src.auto_study - INFO - 开始自动学习流程
+2025-09-11 16:24:11,662 - src.auto_study - INFO - 找到 39 门未完成的课程
+2025-09-11 16:24:11,662 - src.auto_study - INFO - 开始学习课程: 以新质生产力支撑高质量发展（上）
+2025-09-11 16:24:11,663 - src.auto_study - INFO - 访问视频页面: https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=%E4%BB%A5%E6%96%B0%E8%B4%A8%E7%94%9F%E4%BA%A7%E5%8A%9B%E6%94%AF%E6%92%91%E9%AB%98%E8%B4%A8%E9%87%8F%E5%8F%91%E5%B1%95%EF%BC%88%E4%B8%8A%EF%BC%89
+2025-09-11 16:24:14,787 - src.auto_study - WARNING - 未找到视频元素，尝试查找播放按钮
+2025-09-11 16:24:14,808 - src.auto_study - WARNING - 未找到可用的播放按钮
+2025-09-11 16:24:14,808 - src.auto_study - ERROR - 无法播放视频
+2025-09-11 16:24:14,808 - src.auto_study - WARNING - 课程学习中断: 以新质生产力支撑高质量发展（上）
+2025-09-11 16:24:14,808 - __main__ - INFO - 自动学习流程完成
+2025-09-11 16:24:14,808 - __main__ - INFO - ==================================================
+2025-09-11 16:24:14,808 - __main__ - INFO - 最终学习统计
+2025-09-11 16:24:14,808 - __main__ - INFO - ==================================================
+2025-09-11 16:24:14,808 - __main__ - INFO - 总课程数量: 40
+2025-09-11 16:24:14,808 - __main__ - INFO - 已完成课程: 0
+2025-09-11 16:24:14,808 - __main__ - INFO - 完成率: 0.0%
+2025-09-11 16:24:14,808 - __main__ - INFO - 平均进度: 2.7%
+2025-09-11 16:24:14,808 - __main__ - INFO - 分类统计:
+2025-09-11 16:24:14,808 - __main__ - INFO -   选修课: 0/18 (平均进度: 5.7%)
+2025-09-11 16:24:14,808 - __main__ - INFO -   必修课: 0/22 (平均进度: 0.2%)
+2025-09-11 16:24:14,808 - __main__ - INFO - ==================================================
+2025-09-11 16:24:14,809 - __main__ - INFO - 正在清理资源...
+2025-09-11 16:24:15,090 - src.login - INFO - 浏览器已关闭
+2025-09-11 16:24:15,090 - __main__ - INFO - 资源清理完成
+2025-09-11 18:12:53,286 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 18:12:53,286 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 18:12:54,543 - src.login - INFO - 浏览器初始化成功
+2025-09-11 18:28:08,612 - src.login - WARNING - 检查登录状态时发生错误: Page.goto: Timeout 30000ms exceeded.
+Call log:
+  - navigating to "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/tool_box/required?id=275", waiting until "load"
+
+2025-09-11 18:28:08,625 - __main__ - INFO - 当前未登录，正在执行登录...
+2025-09-11 18:28:08,625 - src.login - INFO - 开始登录流程 (主要尝试 1/3)
+2025-09-11 18:28:08,625 - src.login - INFO - 导航到登录页面
+2025-09-11 18:46:38,923 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 18:46:38,923 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 18:46:40,329 - src.login - INFO - 浏览器初始化成功
+2025-09-11 18:46:47,375 - __main__ - INFO - 当前未登录，正在执行登录...
+2025-09-11 18:46:47,375 - src.login - INFO - 开始登录流程 (主要尝试 1/3)
+2025-09-11 18:46:47,375 - src.login - INFO - 导航到登录页面
+2025-09-11 18:46:57,671 - src.login - INFO - 点击登录按钮成功: text=登录
+2025-09-11 18:46:57,672 - src.login - INFO - 验证码尝试 1/5
+2025-09-11 18:46:57,672 - src.login - INFO - 等待登录模态框稳定...
+2025-09-11 18:47:01,204 - src.login - INFO - 登录模态框已稳定
+2025-09-11 18:47:01,584 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 18:47:02,981 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 18:47:04,000 - src.login - INFO - 开始智能验证码处理
+2025-09-11 18:47:04,018 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:47:04,028 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 18:47:04,028 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 18:47:04,028 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 18:47:04,079 - src.captcha_solver - INFO - 验证码识别结果: 4211 -> 4211
+2025-09-11 18:47:04,079 - src.captcha_solver - INFO - 识别结果: 4211
+2025-09-11 18:47:04,079 - src.login - INFO - 开始填写验证码
+2025-09-11 18:47:04,754 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:47:06,093 - src.login - INFO - 验证码输入完成: 4211
+2025-09-11 18:47:07,130 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 18:47:07,591 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 18:47:08,301 - src.login - ERROR - 登录失败: 登录失败
+2025-09-11 18:47:08,301 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 18:47:08,301 - src.login - INFO - 验证码尝试 2/5
+2025-09-11 18:47:08,301 - src.login - INFO - 等待登录模态框稳定...
+2025-09-11 18:47:11,815 - src.login - INFO - 登录模态框已稳定
+2025-09-11 18:47:12,185 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 18:47:13,574 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 18:47:14,591 - src.login - INFO - 开始智能验证码处理
+2025-09-11 18:47:14,602 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:47:14,611 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 18:47:14,612 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 18:47:14,612 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 18:47:14,670 - src.captcha_solver - WARNING - 识别结果长度不足: 831 (3位)
+2025-09-11 18:47:14,670 - src.captcha_solver - INFO - 验证码识别结果: 831 -> 
+2025-09-11 18:47:14,699 - src.captcha_solver - WARNING - 识别结果长度不足: 831 (3位)
+2025-09-11 18:47:14,699 - src.captcha_solver - INFO - 验证码识别结果: 831 -> 
+2025-09-11 18:47:14,699 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 18:47:14,699 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:47:16,882 - src.captcha_solver - INFO - 验证码识别结果: 8022 -> 8022
+2025-09-11 18:47:16,882 - src.captcha_solver - INFO - 识别结果: 8022
+2025-09-11 18:47:16,882 - src.login - INFO - 开始填写验证码
+2025-09-11 18:47:17,553 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:47:18,902 - src.login - INFO - 验证码输入完成: 8022
+2025-09-11 18:47:19,933 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 18:47:20,389 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 18:47:21,116 - src.login - INFO - 登录成功，已进入: text=学习中心
+2025-09-11 18:47:21,116 - src.login - INFO - 登录成功！
+2025-09-11 18:47:21,124 - src.login - INFO - 未找到登录按钮，使用回车键提交
+2025-09-11 18:47:24,323 - src.login - INFO - URL已跳转，登录可能成功
+2025-09-11 18:47:24,323 - src.login - INFO - 登录成功！
+2025-09-11 18:47:24,323 - __main__ - INFO - 登录成功！
+2025-09-11 18:47:24,323 - __main__ - INFO - 开始获取课程信息...
+2025-09-11 18:47:24,323 - src.enhanced_course_parser - INFO - 开始解析必修课程
+2025-09-11 18:47:24,323 - src.enhanced_course_parser - INFO - 访问必修课程页面
+2025-09-11 18:47:27,441 - src.enhanced_course_parser - INFO - 找到 22 个'继续学习'按钮
+2025-09-11 18:47:28,163 - src.enhanced_course_parser - INFO - 必修课解析完成，共获取到 22 门课程
+2025-09-11 18:47:28,163 - src.enhanced_course_parser - INFO - 开始解析选修课程
+2025-09-11 18:47:28,163 - src.enhanced_course_parser - INFO - 访问选修课页面
+2025-09-11 18:47:31,276 - src.enhanced_course_parser - INFO - 找到 18 个表格行
+2025-09-11 18:47:31,938 - src.enhanced_course_parser - INFO - 选修课解析完成，共获取到 18 门课程
+2025-09-11 18:47:31,938 - src.enhanced_course_parser - INFO - 课程解析完成 - 必修课: 22门, 选修课: 18门
+2025-09-11 18:47:31,938 - __main__ - INFO - 成功获取课程信息 - 必修课: 22门, 选修课: 18门, 共计: 40门
+2025-09-11 18:47:31,938 - __main__ - INFO - 自动保存课程信息到数据库...
+2025-09-11 18:47:31,951 - src.enhanced_course_parser - INFO - 成功保存 40 门课程到数据库
+2025-09-11 18:47:31,951 - __main__ - INFO - 课程信息保存成功
+2025-09-11 18:47:31,951 - __main__ - INFO - 开始自动学习流程
+2025-09-11 18:47:31,951 - __main__ - INFO - 发现 39 门未完成的课程，开始学习
+2025-09-11 18:47:31,951 - src.auto_study - INFO - 开始自动学习流程
+2025-09-11 18:47:31,951 - src.auto_study - INFO - 找到 39 门未完成的课程
+2025-09-11 18:47:31,951 - src.auto_study - INFO - 开始学习课程: 以新质生产力支撑高质量发展（上）
+2025-09-11 18:47:31,951 - src.auto_study - INFO - 访问视频页面: https://edu.nxgbjy.org.cn/nxxzxy/index.html#/video_page?name=%E4%BB%A5%E6%96%B0%E8%B4%A8%E7%94%9F%E4%BA%A7%E5%8A%9B%E6%94%AF%E6%92%91%E9%AB%98%E8%B4%A8%E9%87%8F%E5%8F%91%E5%B1%95%EF%BC%88%E4%B8%8A%EF%BC%89&user_course_id=temp_9d0ea425
+2025-09-11 18:47:35,075 - src.auto_study - WARNING - 未找到视频元素，尝试查找播放按钮
+2025-09-11 18:47:35,097 - src.auto_study - WARNING - 未找到可用的播放按钮
+2025-09-11 18:47:35,097 - src.auto_study - ERROR - 无法播放视频
+2025-09-11 18:47:35,097 - src.auto_study - WARNING - 课程学习中断: 以新质生产力支撑高质量发展（上）
+2025-09-11 18:47:35,097 - __main__ - INFO - 自动学习流程完成
+2025-09-11 18:47:35,097 - __main__ - INFO - ==================================================
+2025-09-11 18:47:35,097 - __main__ - INFO - 最终学习统计
+2025-09-11 18:47:35,097 - __main__ - INFO - ==================================================
+2025-09-11 18:47:35,097 - __main__ - INFO - 总课程数量: 40
+2025-09-11 18:47:35,097 - __main__ - INFO - 已完成课程: 0
+2025-09-11 18:47:35,097 - __main__ - INFO - 完成率: 0.0%
+2025-09-11 18:47:35,097 - __main__ - INFO - 平均进度: 2.7%
+2025-09-11 18:47:35,097 - __main__ - INFO - 分类统计:
+2025-09-11 18:47:35,097 - __main__ - INFO -   选修课: 0/18 (平均进度: 5.7%)
+2025-09-11 18:47:35,097 - __main__ - INFO -   必修课: 0/22 (平均进度: 0.2%)
+2025-09-11 18:47:35,097 - __main__ - INFO - ==================================================
+2025-09-11 18:47:35,097 - __main__ - INFO - 正在清理资源...
+2025-09-11 18:47:35,377 - src.login - INFO - 浏览器已关闭
+2025-09-11 18:47:35,377 - __main__ - INFO - 资源清理完成
+2025-09-11 18:55:23,673 - __main__ - INFO - 开始批量自动学习流程
+2025-09-11 18:55:23,673 - __main__ - INFO - 初始化批量自动学习程序
+2025-09-11 18:55:25,210 - src.login - INFO - 浏览器初始化成功
+2025-09-11 18:55:33,672 - __main__ - INFO - 当前未登录，正在执行登录...
+2025-09-11 18:55:33,672 - src.login - INFO - 开始登录流程 (主要尝试 1/3)
+2025-09-11 18:55:33,672 - src.login - INFO - 导航到登录页面
+2025-09-11 18:55:49,221 - src.login - INFO - 点击登录按钮成功: text=登录
+2025-09-11 18:55:49,221 - src.login - INFO - 验证码尝试 1/5
+2025-09-11 18:55:49,221 - src.login - INFO - 等待登录模态框稳定...
+2025-09-11 18:55:52,750 - src.login - INFO - 登录模态框已稳定
+2025-09-11 18:55:53,131 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 18:55:54,528 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 18:55:55,541 - src.login - INFO - 开始智能验证码处理
+2025-09-11 18:55:55,547 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:55:55,553 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 18:55:55,553 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 18:55:55,553 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 18:55:55,600 - src.captcha_solver - WARNING - 识别结果长度不足: 921 (3位)
+2025-09-11 18:55:55,600 - src.captcha_solver - INFO - 验证码识别结果: q21 -> 
+2025-09-11 18:55:55,626 - src.captcha_solver - WARNING - 识别结果长度不足: 921 (3位)
+2025-09-11 18:55:55,627 - src.captcha_solver - INFO - 验证码识别结果: q21 -> 
+2025-09-11 18:55:55,627 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 18:55:55,627 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:55:57,830 - src.captcha_solver - INFO - 验证码识别结果: 9693 -> 9693
+2025-09-11 18:55:57,831 - src.captcha_solver - INFO - 识别结果: 9693
+2025-09-11 18:55:57,831 - src.login - INFO - 开始填写验证码
+2025-09-11 18:55:58,495 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:55:59,830 - src.login - INFO - 验证码输入完成: 9693
+2025-09-11 18:56:00,869 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 18:56:01,328 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 18:56:01,907 - src.login - ERROR - 登录失败: 校验码错误
+2025-09-11 18:56:01,907 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 18:56:01,907 - src.login - INFO - 验证码尝试 2/5
+2025-09-11 18:56:01,907 - src.login - INFO - 等待登录模态框稳定...
+2025-09-11 18:56:05,432 - src.login - INFO - 登录模态框已稳定
+2025-09-11 18:56:05,804 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 18:56:07,188 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 18:56:08,205 - src.login - INFO - 开始智能验证码处理
+2025-09-11 18:56:08,219 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:56:08,229 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 18:56:08,229 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 18:56:08,229 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 18:56:08,261 - src.captcha_solver - WARNING - 识别结果长度不足: 930 (3位)
+2025-09-11 18:56:08,261 - src.captcha_solver - INFO - 验证码识别结果: 930 -> 
+2025-09-11 18:56:08,292 - src.captcha_solver - WARNING - 识别结果长度不足: 930 (3位)
+2025-09-11 18:56:08,292 - src.captcha_solver - INFO - 验证码识别结果: 930 -> 
+2025-09-11 18:56:08,292 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 18:56:08,292 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:56:10,475 - src.captcha_solver - WARNING - 识别结果长度不足: 394 (3位)
+2025-09-11 18:56:10,475 - src.captcha_solver - INFO - 验证码识别结果: 394 -> 
+2025-09-11 18:56:10,501 - src.captcha_solver - WARNING - 识别结果长度不足: 394 (3位)
+2025-09-11 18:56:10,501 - src.captcha_solver - INFO - 验证码识别结果: 394 -> 
+2025-09-11 18:56:10,501 - src.captcha_solver - INFO - 验证码识别尝试 3/3
+2025-09-11 18:56:10,501 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:56:12,672 - src.captcha_solver - INFO - 验证码识别结果: 4622 -> 4622
+2025-09-11 18:56:12,672 - src.captcha_solver - INFO - 识别结果: 4622
+2025-09-11 18:56:12,672 - src.login - INFO - 开始填写验证码
+2025-09-11 18:56:13,339 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:56:14,682 - src.login - INFO - 验证码输入完成: 4622
+2025-09-11 18:56:15,719 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 18:56:16,171 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 18:56:16,743 - src.login - ERROR - 登录失败: 校验码错误
+2025-09-11 18:56:16,743 - src.login - WARNING - 填写表单失败，重试
+2025-09-11 18:56:16,744 - src.login - INFO - 验证码尝试 3/5
+2025-09-11 18:56:16,744 - src.login - INFO - 等待登录模态框稳定...
+2025-09-11 18:56:20,276 - src.login - INFO - 登录模态框已稳定
+2025-09-11 18:56:20,648 - src.login - INFO - 用户名填写成功，使用选择器: input[placeholder="用户名"]
+2025-09-11 18:56:22,041 - src.login - INFO - 密码填写成功，使用选择器: input[type="password"].el-input__inner
+2025-09-11 18:56:23,061 - src.login - INFO - 开始智能验证码处理
+2025-09-11 18:56:23,075 - src.login - INFO - 找到验证码输入框，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:56:23,083 - src.login - INFO - 找到验证码图片: img[src*="/device/login!get_auth_code.do"], 尺寸: 110x40
+2025-09-11 18:56:23,083 - src.login - INFO - 开始识别4位数字验证码
+2025-09-11 18:56:23,083 - src.captcha_solver - INFO - 验证码识别尝试 1/3
+2025-09-11 18:56:23,115 - src.captcha_solver - WARNING - 识别结果长度不足: 399 (3位)
+2025-09-11 18:56:23,116 - src.captcha_solver - INFO - 验证码识别结果: 399 -> 
+2025-09-11 18:56:23,146 - src.captcha_solver - WARNING - 识别结果长度不足: 399 (3位)
+2025-09-11 18:56:23,146 - src.captcha_solver - INFO - 验证码识别结果: 399 -> 
+2025-09-11 18:56:23,146 - src.captcha_solver - INFO - 验证码识别尝试 2/3
+2025-09-11 18:56:23,146 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:56:25,327 - src.captcha_solver - WARNING - 识别结果长度不足: 586 (3位)
+2025-09-11 18:56:25,327 - src.captcha_solver - INFO - 验证码识别结果: s86 -> 
+2025-09-11 18:56:25,355 - src.captcha_solver - WARNING - 识别结果长度不足: 586 (3位)
+2025-09-11 18:56:25,355 - src.captcha_solver - INFO - 验证码识别结果: s86 -> 
+2025-09-11 18:56:25,355 - src.captcha_solver - INFO - 验证码识别尝试 3/3
+2025-09-11 18:56:25,355 - src.captcha_solver - INFO - 刷新验证码
+2025-09-11 18:56:27,527 - src.captcha_solver - INFO - 验证码识别结果: 9245 -> 9245
+2025-09-11 18:56:27,527 - src.captcha_solver - INFO - 识别结果: 9245
+2025-09-11 18:56:27,527 - src.login - INFO - 开始填写验证码
+2025-09-11 18:56:28,210 - src.login - INFO - 验证码填写成功，使用选择器: input[placeholder="验证码"].el-input__inner
+2025-09-11 18:56:29,553 - src.login - INFO - 验证码输入完成: 9245
+2025-09-11 18:56:30,593 - src.login - INFO - 找到提交按钮，使用选择器: button.el-button.el-button--primary:has-text("登录")
+2025-09-11 18:56:31,044 - src.login - INFO - 登录表单已提交（通过点击按钮）
+2025-09-11 18:56:31,776 - src.login - INFO - 登录成功（无错误、无登录表单、有Session）
+2025-09-11 18:56:31,776 - src.login - INFO - 登录成功！
+2025-09-11 18:56:31,785 - src.login - INFO - 未找到登录按钮，使用回车键提交
+2025-09-11 18:56:35,001 - src.login - INFO - URL已跳转，登录可能成功
+2025-09-11 18:56:35,001 - src.login - INFO - 登录成功！
+2025-09-11 18:56:35,001 - __main__ - INFO - 登录成功！
+2025-09-11 18:56:35,001 - __main__ - INFO - 开始获取课程信息...
+2025-09-11 18:56:35,001 - src.enhanced_course_parser - INFO - 开始解析必修课程
+2025-09-11 18:56:35,001 - src.enhanced_course_parser - INFO - 访问必修课程页面
+2025-09-11 18:56:38,126 - src.enhanced_course_parser - INFO - 找到 22 个'继续学习'按钮
+2025-09-11 18:57:33,261 - src.enhanced_course_parser - INFO - 必修课解析完成，共获取到 22 门课程
+2025-09-11 18:57:33,263 - src.enhanced_course_parser - INFO - 开始解析选修课程
+2025-09-11 18:57:33,263 - src.enhanced_course_parser - INFO - 访问选修课页面
+2025-09-11 18:57:36,386 - src.enhanced_course_parser - INFO - 找到 18 个表格行
+2025-09-11 18:57:37,035 - src.enhanced_course_parser - INFO - 选修课解析完成，共获取到 18 门课程
+2025-09-11 18:57:37,035 - src.enhanced_course_parser - INFO - 课程解析完成 - 必修课: 22门, 选修课: 18门
+2025-09-11 18:57:37,035 - __main__ - INFO - 成功获取课程信息 - 必修课: 22门, 选修课: 18门, 共计: 40门
+2025-09-11 18:57:37,035 - __main__ - INFO - 自动保存课程信息到数据库...
+2025-09-11 18:57:37,049 - src.enhanced_course_parser - INFO - 成功保存 40 门课程到数据库
+2025-09-11 18:57:37,049 - __main__ - INFO - 课程信息保存成功
+2025-09-11 18:57:37,049 - __main__ - INFO - 开始自动学习流程
+2025-09-11 18:57:37,049 - __main__ - INFO - 发现 39 门未完成的课程，开始学习
+2025-09-11 18:57:37,049 - src.auto_study - INFO - 开始自动学习流程
+2025-09-11 18:57:37,050 - src.auto_study - INFO - 找到 39 门未完成的课程
+2025-09-11 18:57:37,050 - src.auto_study - INFO - 开始学习课程: 以新质生产力支撑高质量发展（上）
+2025-09-11 18:57:37,050 - src.auto_study - INFO - 访问视频页面: https://edu.nxgbjy.org.cn/nxxzxy/index.html#/video_page?name=%E4%BB%A5%E6%96%B0%E8%B4%A8%E7%94%9F%E4%BA%A7%E5%8A%9B%E6%94%AF%E6%92%91%E9%AB%98%E8%B4%A8%E9%87%8F%E5%8F%91%E5%B1%95%EF%BC%88%E4%B8%8A%EF%BC%89&user_course_id=temp_9d0ea425
+2025-09-11 18:57:40,175 - src.auto_study - WARNING - 未找到视频元素，尝试查找播放按钮
+2025-09-11 18:57:40,191 - src.auto_study - WARNING - 未找到可用的播放按钮
+2025-09-11 18:57:40,191 - src.auto_study - ERROR - 无法播放视频
+2025-09-11 18:57:40,191 - src.auto_study - WARNING - 课程学习中断: 以新质生产力支撑高质量发展（上）
+2025-09-11 18:57:40,191 - __main__ - INFO - 自动学习流程完成
+2025-09-11 18:57:40,191 - __main__ - INFO - ==================================================
+2025-09-11 18:57:40,191 - __main__ - INFO - 最终学习统计
+2025-09-11 18:57:40,191 - __main__ - INFO - ==================================================
+2025-09-11 18:57:40,191 - __main__ - INFO - 总课程数量: 40
+2025-09-11 18:57:40,191 - __main__ - INFO - 已完成课程: 0
+2025-09-11 18:57:40,191 - __main__ - INFO - 完成率: 0.0%
+2025-09-11 18:57:40,191 - __main__ - INFO - 平均进度: 2.7%
+2025-09-11 18:57:40,191 - __main__ - INFO - 分类统计:
+2025-09-11 18:57:40,191 - __main__ - INFO -   选修课: 0/18 (平均进度: 5.7%)
+2025-09-11 18:57:40,191 - __main__ - INFO -   必修课: 0/22 (平均进度: 0.2%)
+2025-09-11 18:57:40,191 - __main__ - INFO - ==================================================
+2025-09-11 18:57:40,191 - __main__ - INFO - 正在清理资源...
+2025-09-11 18:57:40,434 - src.login - INFO - 浏览器已关闭
+2025-09-11 18:57:40,434 - __main__ - INFO - 资源清理完成

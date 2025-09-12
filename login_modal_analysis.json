@@ -1,0 +1,426 @@
+{
+  "test_time": "2025-09-11 17:23:09",
+  "login_modal_elements": [
+    {
+      "selector": "[class*=\"modal\"]",
+      "tag": "DIV",
+      "classes": "v-modal",
+      "id": null,
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "z_index": "2000",
+      "position": "fixed"
+    },
+    {
+      "selector": "[class*=\"dialog\"]",
+      "tag": "DIV",
+      "classes": "el-dialog__wrapper",
+      "id": null,
+      "bbox": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "z_index": "2001",
+      "position": "fixed"
+    },
+    {
+      "selector": "[class*=\"dialog\"]",
+      "tag": "DIV",
+      "classes": "el-dialog el-dialog--center",
+      "id": null,
+      "bbox": {
+        "x": 420,
+        "y": 135,
+        "width": 600,
+        "height": 399
+      },
+      "z_index": "auto",
+      "position": "relative"
+    },
+    {
+      "selector": "[class*=\"dialog\"]",
+      "tag": "DIV",
+      "classes": "el-dialog__body",
+      "id": null,
+      "bbox": {
+        "x": 420,
+        "y": 199,
+        "width": 600,
+        "height": 335
+      },
+      "z_index": "auto",
+      "position": "static"
+    },
+    {
+      "selector": ".el-dialog",
+      "tag": "DIV",
+      "classes": "el-dialog el-dialog--center",
+      "id": null,
+      "bbox": {
+        "x": 420,
+        "y": 135,
+        "width": 600,
+        "height": 399
+      },
+      "z_index": "auto",
+      "position": "relative"
+    }
+  ],
+  "modal_behavior": {
+    "transitions": [],
+    "animations": [
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "I",
+        "classes": "el-input__icon el-icon-user",
+        "animation": "none",
+        "transition": "0.3s"
+      },
+      {
+        "tag": "INPUT",
+        "classes": "el-input__inner",
+        "animation": "none",
+        "transition": "0.2s"
+      },
+      {
+        "tag": "SPAN",
+        "classes": "el-input__prefix",
+        "animation": "none",
+        "transition": "0.3s"
+      }
+    ],
+    "height_changes": [],
+    "content_updates": []
+  },
+  "shake_triggers": [
+    "登录框本身是抖动的主要原因"
+  ],
+  "element_changes": [],
+  "recommendations": [
+    {
+      "type": "modal_detection",
+      "issue": "检测到5个可能的模态框元素",
+      "suggestion": "使用具体的模态框选择器而不是通用选择器，提高稳定性",
+      "priority": "medium"
+    }
+  ],
+  "captcha_behavior": {
+    "captcha_images": [
+      {
+        "selector": "img[src*=\"code\"]",
+        "bbox": {
+          "x": 770,
+          "y": 354,
+          "width": 110,
+          "height": 40
+        },
+        "src": "/device/login!get_auth_code.do?terminal=1&code=94"
+      },
+      {
+        "selector": "img[src*=\"auth\"]",
+        "bbox": {
+          "x": 770,
+          "y": 354,
+          "width": 110,
+          "height": 40
+        },
+        "src": "/device/login!get_auth_code.do?terminal=1&code=8"
+      }
+    ],
+    "refresh_buttons": [],
+    "refresh_triggered": false,
+    "layout_impact": []
+  },
+  "shake_events": [],
+  "post_close_analysis": {
+    "modal_closed": true,
+    "shake_after_close": false
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "test_time": "2025-09-11 15:37:21",
+  "page_info": {
+    "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/my_elective_courses?active_menu=2",
+    "title": "宁夏干部教育培训网络学院"
+  },
+  "parsing_results": {
+    "course_count": 0,
+    "courses": []
+  },
+  "page_elements": {
+    "[class*=\"course\"]": {
+      "count": 75,
+      "sample_text": "选修课（共18门    13.5时长）\n课程名称\t学习进度\t播放\t考试\t学时\t操作\n深入学习贯彻习近平总书记关于宣传思想文化工作重要指示精神 助力宁夏经济社会发展\t\n100%\n\t播放\t否\t1\t完成\n深"
+    }
+  },
+  "navigation": [
+    {
+      "text": "text=选课中心",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=我的学习",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=本年选修",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "text": "text=选修课",
+      "visible": true,
+      "enabled": true
+    }
+  ],
+  "issues_found": [
+    "未解析到任何课程"
+  ]
+}

@@ -1,0 +1,191 @@
+{
+  "total_steps": 13,
+  "jump_records": [
+    {
+      "step": 1,
+      "name": "初始化浏览器 (前)",
+      "jumped": false,
+      "error": "No page"
+    },
+    {
+      "step": 3,
+      "name": "导航到主页 (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "about:blank",
+        "dialogExists": false,
+        "dialogTop": null,
+        "dialogLeft": null,
+        "timestamp": 1757642089104
+      },
+      "jumped": false
+    },
+    {
+      "step": 5,
+      "name": "等待DOM加载 (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 0,
+        "dialogLeft": 0,
+        "timestamp": 1757642098887
+      },
+      "jumped": false
+    },
+    {
+      "step": 7,
+      "name": "点击登录按钮 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 0,
+        "dialogLeft": 0,
+        "timestamp": 1757642101195
+      },
+      "jumped": true,
+      "details": {
+        "scrollX_change": 0,
+        "scrollY_change": 0,
+        "dialogTop_change": 135,
+        "dialogLeft_change": 420
+      }
+    },
+    {
+      "step": 9,
+      "name": "等待登录框出现 (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642101667
+      },
+      "jumped": false
+    },
+    {
+      "step": 11,
+      "name": "应用稳定性修复 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642103480
+      },
+      "jumped": false
+    },
+    {
+      "step": 13,
+      "name": "等待模态框稳定 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642103792
+      },
+      "jumped": false
+    },
+    {
+      "step": 15,
+      "name": "填写用户名 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642105107
+      },
+      "jumped": false
+    },
+    {
+      "step": 17,
+      "name": "填写密码 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642105667
+      },
+      "jumped": false
+    },
+    {
+      "step": 19,
+      "name": "处理验证码 (尝试识别并输入) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642106230
+      },
+      "jumped": false
+    },
+    {
+      "step": 21,
+      "name": "点击提交按钮 (可能跳动源) (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642106792
+      },
+      "jumped": false
+    },
+    {
+      "step": 23,
+      "name": "等待登录结果并检查跳转 (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642107239
+      },
+      "jumped": false
+    },
+    {
+      "step": 25,
+      "name": "检查最终登录状态 (前)",
+      "state": {
+        "scrollX": 0,
+        "scrollY": 0,
+        "url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/",
+        "dialogExists": true,
+        "dialogTop": 135,
+        "dialogLeft": 420,
+        "timestamp": 1757642110558
+      },
+      "jumped": false
+    }
+  ],
+  "summary": {
+    "total_jumps": 1,
+    "jump_steps": [
+      "点击登录按钮 (可能跳动源) (前)"
+    ]
+  }
+}

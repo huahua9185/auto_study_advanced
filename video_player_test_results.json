@@ -1,0 +1,119 @@
+{
+  "test_time": "2025-09-11 16:38:01",
+  "summary": {
+    "required_courses_tested": 3,
+    "elective_courses_tested": 3,
+    "successful_video_loads": 0,
+    "failed_video_loads": 6,
+    "total_tests": 6
+  },
+  "video_analysis": {
+    "required_courses": [
+      {
+        "course_name": "中国特色社会主义理论体系文献导读（上）",
+        "course_type": "required",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=%E4%B8%AD%E5%9B%BD%E7%89%B9%E8%89%B2%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E7%90%86%E8%AE%BA%E4%BD%93%E7%B3%BB%E6%96%87%E7%8C%AE%E5%AF%BC%E8%AF%BB%EF%BC%88%E4%B8%8A%EF%BC%89",
+        "user_course_id": "",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      },
+      {
+        "course_name": "中国特色社会主义理论体系文献导读（下）",
+        "course_type": "required",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=%E4%B8%AD%E5%9B%BD%E7%89%B9%E8%89%B2%E7%A4%BE%E4%BC%9A%E4%B8%BB%E4%B9%89%E7%90%86%E8%AE%BA%E4%BD%93%E7%B3%BB%E6%96%87%E7%8C%AE%E5%AF%BC%E8%AF%BB%EF%BC%88%E4%B8%8B%EF%BC%89",
+        "user_course_id": "",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      },
+      {
+        "course_name": "以新质生产力支撑高质量发展（上）",
+        "course_type": "required",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=%E4%BB%A5%E6%96%B0%E8%B4%A8%E7%94%9F%E4%BA%A7%E5%8A%9B%E6%94%AF%E6%92%91%E9%AB%98%E8%B4%A8%E9%87%8F%E5%8F%91%E5%B1%95%EF%BC%88%E4%B8%8A%EF%BC%89",
+        "user_course_id": "",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      }
+    ],
+    "elective_courses": [
+      {
+        "course_name": "2025年《政府工作报告》学习解读（上）",
+        "course_type": "elective",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=2025%E5%B9%B4%E3%80%8A%E6%94%BF%E5%BA%9C%E5%B7%A5%E4%BD%9C%E6%8A%A5%E5%91%8A%E3%80%8B%E5%AD%A6%E4%B9%A0%E8%A7%A3%E8%AF%BB%EF%BC%88%E4%B8%8A%EF%BC%89",
+        "user_course_id": "45b81e01",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      },
+      {
+        "course_name": "2025年《政府工作报告》学习解读（下）",
+        "course_type": "elective",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=2025%E5%B9%B4%E3%80%8A%E6%94%BF%E5%BA%9C%E5%B7%A5%E4%BD%9C%E6%8A%A5%E5%91%8A%E3%80%8B%E5%AD%A6%E4%B9%A0%E8%A7%A3%E8%AF%BB%EF%BC%88%E4%B8%8B%EF%BC%89",
+        "user_course_id": "99246d2b",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      },
+      {
+        "course_name": "以中国式现代化推进中华民族伟大复兴——党的二十大报告学习解析（上）",
+        "course_type": "elective",
+        "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=%E4%BB%A5%E4%B8%AD%E5%9B%BD%E5%BC%8F%E7%8E%B0%E4%BB%A3%E5%8C%96%E6%8E%A8%E8%BF%9B%E4%B8%AD%E5%8D%8E%E6%B0%91%E6%97%8F%E4%BC%9F%E5%A4%A7%E5%A4%8D%E5%85%B4%E2%80%94%E2%80%94%E5%85%9A%E7%9A%84%E4%BA%8C%E5%8D%81%E5%A4%A7%E6%8A%A5%E5%91%8A%E5%AD%A6%E4%B9%A0%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%8A%EF%BC%89",
+        "user_course_id": "071f4cb6",
+        "course_id": "",
+        "video_loaded": false,
+        "video_elements": [],
+        "controls_found": {},
+        "page_title": "宁夏干部教育培训网络学院",
+        "current_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/study_center/my_study/lean_task",
+        "screenshot_saved": false,
+        "html_saved": false,
+        "issues": [
+          "页面重定向到非视频页面"
+        ]
+      }
+    ]
+  },
+  "errors": []
+}

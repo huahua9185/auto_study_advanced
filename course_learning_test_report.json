@@ -1,0 +1,90 @@
+{
+  "test_time": "2025-09-11 15:57:41",
+  "summary": {
+    "required_courses_count": 22,
+    "elective_courses_count": 18,
+    "total_courses": 40
+  },
+  "required_courses": [
+    {
+      "course_name": "中国特色社会主义理论体系文献导读（上）",
+      "course_type": "required",
+      "progress": 4.9,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=中国特色社会主义理论体系文献导读（上）",
+      "user_course_id": ""
+    },
+    {
+      "course_name": "中国特色社会主义理论体系文献导读（下）",
+      "course_type": "required",
+      "progress": 0.1,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=中国特色社会主义理论体系文献导读（下）",
+      "user_course_id": ""
+    },
+    {
+      "course_name": "年轻干部如何锤炼过硬的政治素质（上）",
+      "course_type": "required",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=年轻干部如何锤炼过硬的政治素质（上）",
+      "user_course_id": ""
+    },
+    {
+      "course_name": "年轻干部如何锤炼过硬的政治素质（下）",
+      "course_type": "required",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=年轻干部如何锤炼过硬的政治素质（下）",
+      "user_course_id": ""
+    },
+    {
+      "course_name": "坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（上）",
+      "course_type": "required",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/course_study?name=坚决打好反腐败斗争攻坚战持久战总体战——二十届中央纪委四次全会精神解读（上）",
+      "user_course_id": ""
+    }
+  ],
+  "elective_courses": [
+    {
+      "course_name": "深入学习贯彻习近平总书记关于宣传思想文化工作重要指示精神 助力宁夏经济社会发展",
+      "course_type": "elective",
+      "progress": 100.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=深入学习贯彻习近平总书记关于宣传思想文化工作重要指示精神 助力宁夏经济社会发展",
+      "user_course_id": "fca653eb"
+    },
+    {
+      "course_name": "坚持党对人民军队的绝对领导（上）",
+      "course_type": "elective",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=坚持党对人民军队的绝对领导（上）",
+      "user_course_id": "a5b9f4a5"
+    },
+    {
+      "course_name": "深入学习贯彻习近平新时代中国特色社会主义思想 加快华能宁夏新能源建设步伐",
+      "course_type": "elective",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=深入学习贯彻习近平新时代中国特色社会主义思想 加快华能宁夏新能源建设步伐",
+      "user_course_id": "da027a37"
+    },
+    {
+      "course_name": "深入学习贯彻习近平总书记关于构建新型电力系统重要指示批示精神 为美丽新宁夏建设充电赋能",
+      "course_type": "elective",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=深入学习贯彻习近平总书记关于构建新型电力系统重要指示批示精神 为美丽新宁夏建设充电赋能",
+      "user_course_id": "eb4d0acd"
+    },
+    {
+      "course_name": "2025年《政府工作报告》学习解读（下）",
+      "course_type": "elective",
+      "progress": 0.0,
+      "video_url": "https://edu.nxgbjy.org.cn/nxxzxy/index.html#/elective_course_play?name=2025年《政府工作报告》学习解读（下）",
+      "user_course_id": "99246d2b"
+    }
+  ],
+  "test_results": {
+    "login_success": true,
+    "course_parsing_success": true,
+    "learning_page_accessible": true
+  },
+  "recommendations": [
+    "课程解析功能正常，可以进行学习页面测试"
+  ]
+}

@@ -1,0 +1,32 @@
+[
+  {
+    "sample": 1,
+    "screenshot": "data/captcha_sample_1.png",
+    "result": "328",
+    "length": 3
+  },
+  {
+    "sample": 2,
+    "screenshot": "data/captcha_sample_2.png",
+    "result": "1636",
+    "length": 4
+  },
+  {
+    "sample": 3,
+    "screenshot": "data/captcha_sample_3.png",
+    "result": "49",
+    "length": 2
+  },
+  {
+    "sample": 4,
+    "screenshot": "data/captcha_sample_4.png",
+    "result": "096",
+    "length": 3
+  },
+  {
+    "sample": 5,
+    "screenshot": "data/captcha_sample_5.png",
+    "result": "4345",
+    "length": 4
+  }
+]
