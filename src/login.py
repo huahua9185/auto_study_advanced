@@ -1595,8 +1595,59 @@ class LoginManager:
             return False
     
     def _submit_login_form_stable(self) -> bool:
-        """稳定版本的提交登录表单 - 基于测试脚本"""
+        """稳定版本的提交登录表单 - 基于测试脚本，包含网络监听"""
         try:
+            import time
+            import json
+            from datetime import datetime
+            
+            # 存储登录响应的全局变量
+            if not hasattr(self, '_login_responses'):
+                self._login_responses = []
+            
+            def handle_response(response):
+                """处理HTTP响应，特别是登录相关的POST请求"""
+                try:
+                    url = response.url
+                    status = response.status
+                    method = response.request.method
+                    
+                    # 检查是否是登录相关的POST请求
+                    is_login_request = (
+                        method == 'POST' and 
+                        ('login' in url.lower() or '/device/login' in url or '/user/login' in url or 'login.do' in url)
+                    )
+                    
+                    if is_login_request or method == 'POST':
+                        try:
+                            body = response.text()
+                            
+                            login_resp = {
+                                'timestamp': datetime.now().isoformat(),
+                                'method': method,
+                                'url': url,
+                                'status': status,
+                                'body': body,
+                                'is_login_request': is_login_request
+                            }
+                            self._login_responses.append(login_resp)
+                            
+                            self.logger.info(f"捕获到POST响应: {method} {url} -> {status}")
+                            self.logger.info(f"响应体: {body}")
+                            
+                        except Exception as e:
+                            self.logger.debug(f"获取响应体失败: {str(e)}")
+                            
+                except Exception as e:
+                    self.logger.error(f"处理响应时出错: {str(e)}")
+            
+            # 设置网络监听
+            try:
+                self.page.on("response", handle_response)
+                self.logger.info("已启用登录网络响应监听")
+            except Exception as e:
+                self.logger.debug(f"无法设置网络监听: {str(e)}")
+            
             # 查找提交按钮
             submit_selectors = [
                 'button:has-text("登录")',
@@ -1613,7 +1664,7 @@ class LoginManager:
                     if element.count() > 0 and element.is_visible():
                         element.click()
                         self.logger.info(f"提交按钮点击成功，选择器: {selector}")
-                        time.sleep(2)  # 等待页面响应
+                        time.sleep(3)  # 增加等待时间确保能捕获响应
                         return True
                 except:
                     continue
@@ -1621,7 +1672,7 @@ class LoginManager:
             # 备用方案：按回车键
             self.logger.info("未找到提交按钮，使用回车键提交")
             self.page.keyboard.press('Enter')
-            time.sleep(2)
+            time.sleep(3)  # 增加等待时间确保能捕获响应
             return True
                     
         except Exception as e:
@@ -1629,12 +1680,166 @@ class LoginManager:
             return False
     
     def _check_login_result_simple(self) -> str:
-        """简化版本的登录结果检查 - 基于测试脚本"""
+        """简化版本的登录结果检查 - 基于实际测试的准确判定，包含AJAX响应监听"""
         try:
-            # 检查常见的错误消息
+            import time
+            import json
+            from datetime import datetime
+            
+            # 存储捕获的网络响应
+            login_responses = []
+            
+            def handle_response(response):
+                """处理HTTP响应，特别是登录相关的POST请求"""
+                try:
+                    url = response.url
+                    status = response.status
+                    method = response.request.method
+                    
+                    # 检查是否是登录相关的POST请求
+                    is_login_request = (
+                        method == 'POST' and 
+                        ('login' in url.lower() or '/device/login' in url or '/user/login' in url or 'login.do' in url)
+                    )
+                    
+                    if is_login_request or method == 'POST':
+                        try:
+                            body = response.text()
+                            
+                            login_resp = {
+                                'timestamp': datetime.now().isoformat(),
+                                'method': method,
+                                'url': url,
+                                'status': status,
+                                'body': body,
+                                'is_login_request': is_login_request
+                            }
+                            login_responses.append(login_resp)
+                            
+                            self.logger.info(f"捕获到POST响应: {method} {url} -> {status}")
+                            self.logger.info(f"响应体: {body}")
+                            
+                        except Exception as e:
+                            self.logger.debug(f"获取响应体失败: {str(e)}")
+                            
+                except Exception as e:
+                    self.logger.error(f"处理响应时出错: {str(e)}")
+            
+            # 如果页面已初始化，则设置网络监听
+            try:
+                self.page.on("response", handle_response)
+                self.logger.info("已启用网络响应监听")
+            except:
+                self.logger.debug("无法设置网络监听")
+            
+            # 首先快速检查是否有立即显示的成功消息
+            immediate_success_selectors = [
+                '.el-message--success',  # Element UI 成功消息
+                '.el-message.el-message--success',
+                '.el-notification--success',
+                '.el-notification.el-notification--success',
+                '[class*="success"][class*="message"]',
+                '[class*="success"][class*="notification"]'
+            ]
+            
+            for selector in immediate_success_selectors:
+                try:
+                    if self.page.locator(selector).count() > 0:
+                        element = self.page.locator(selector).first
+                        if element.is_visible():
+                            message_text = element.text_content() or ""
+                            self.logger.info(f"立即检测到系统成功消息: {message_text}")
+                            return "success"
+                except:
+                    continue
+            
+            # 等待AJAX响应和消息显示（稍微长一点确保能捕获）
+            time.sleep(3)
+            
+            # 检查捕获的网络响应中是否有登录成功消息
+            responses_to_check = []
+            
+            # 如果存在已捕获的响应，使用它们
+            if hasattr(self, '_login_responses') and self._login_responses:
+                responses_to_check = self._login_responses
+                self.logger.info(f"使用已捕获的 {len(responses_to_check)} 个网络响应进行检查")
+            else:
+                responses_to_check = login_responses
+            
+            for resp in responses_to_check:
+                body = resp['body']
+                
+                # 尝试解析JSON响应
+                try:
+                    json_data = json.loads(body)
+                    if isinstance(json_data, dict):
+                        # 检查message字段
+                        if 'message' in json_data:
+                            message = json_data['message']
+                            if '登录成功' in message or '登陆成功' in message:
+                                self.logger.info(f"通过AJAX响应检测到登录成功: {message}")
+                                return "success"
+                            elif '登录失败' in message or '登陆失败' in message:
+                                self.logger.info(f"通过AJAX响应检测到登录失败: {message}")
+                                return "auth_error"
+                        
+                        # 检查status字段（通常1表示成功，0表示失败）
+                        if 'status' in json_data:
+                            status_val = json_data['status']
+                            if status_val == 1 and 'user' in json_data:
+                                self.logger.info(f"通过AJAX响应状态码检测到登录成功: status={status_val}")
+                                return "success"
+                            elif status_val == 0:
+                                self.logger.info(f"通过AJAX响应状态码检测到登录失败: status={status_val}")
+                                return "auth_error"
+                                
+                except json.JSONDecodeError:
+                    # 非JSON响应，检查文本内容
+                    if '登录成功' in body or '登陆成功' in body:
+                        self.logger.info(f"通过AJAX文本响应检测到登录成功")
+                        return "success"
+                    elif '登录失败' in body or '登陆失败' in body:
+                        self.logger.info(f"通过AJAX文本响应检测到登录失败")
+                        return "auth_error"
+            
+            # 1. 扩展检查系统返回的成功消息（最可靠的判定依据）
+            success_selectors = [
+                '.el-message--success',  # Element UI 成功消息
+                '.el-message.el-message--success',
+                '.el-notification--success',
+                '.el-notification.el-notification--success',
+                '.el-notification__content:has-text("登录成功")',
+                '.el-notification__content:has-text("登陆成功")',
+                '.el-message:has-text("登录成功")',
+                '.el-message:has-text("登陆成功")',
+                '[class*="success"]:has-text("登录成功")',
+                '[class*="success"]:has-text("登陆成功")',
+                'text=登录成功',
+                'text=登陆成功',
+                # 更宽泛的选择器
+                '[class*="message"][class*="success"]',
+                '[class*="notification"][class*="success"]',
+                '.success-message',
+                '.success-notification'
+            ]
+            
+            for selector in success_selectors:
+                try:
+                    if self.page.locator(selector).count() > 0:
+                        elements = self.page.locator(selector).all()
+                        for element in elements:
+                            if element.is_visible():
+                                message_text = element.text_content() or ""
+                                self.logger.info(f"检测到系统登录成功消息: {selector} -> {message_text}")
+                                return "success"
+                except Exception as e:
+                    self.logger.debug(f"检查成功消息选择器 {selector} 失败: {str(e)}")
+                    continue
+            
+            # 2. 检查错误消息
             error_selectors = [
                 '.el-message--error',
-                '.error-message',
+                '.error-message', 
                 '[class*="error"]',
                 '.el-form-item__error'
             ]
@@ -1655,19 +1860,66 @@ class LoginManager:
                 except:
                     continue
             
-            # 检查是否成功跳转
-            current_url = self.page.url
-            success_indicators = ["#/home", "#/dashboard", "#/main", "#/user"]
+            # 3. 检查登录框是否消失
+            try:
+                modal_exists = self.page.locator('.el-dialog').count() > 0
+                if modal_exists:
+                    # 再次检查登录框是否可见
+                    modal_visible = self.page.locator('.el-dialog').first.is_visible()
+                    if not modal_visible:
+                        # 登录框存在但不可见，很可能是消失动画中，判定为成功
+                        self.logger.debug("登录框存在但不可见，判定为登录成功")
+                        return "success"
+                    else:
+                        # 登录框还在且可见，可能还在登录过程中
+                        return "unknown"
+            except:
+                # 如果检查失败，假定登录框已消失
+                pass
             
-            for indicator in success_indicators:
-                if indicator in current_url:
+            # 3. 如果登录框消失，检查是否有会话Cookie
+            try:
+                cookies = self.page.context.cookies()
+                session_cookies = [c for c in cookies if 'JSESSIONID' in c.get('name', '')]
+                if session_cookies:
+                    # 有会话Cookie且登录框消失，很可能登录成功
+                    self.logger.debug("检测到会话Cookie且登录框已消失，判定为登录成功")
                     return "success"
+            except Exception as e:
+                self.logger.debug(f"检查Cookie失败: {str(e)}")
             
-            # 检查是否登录框还在
-            modal_exists = self.page.locator('.el-dialog').count() > 0
-            if not modal_exists:
-                # 登录框消失但未明确成功跳转，可能是成功
+            # 4. 备用判定：检查页面上是否还有登录相关的表单元素
+            login_form_selectors = [
+                'input[placeholder*="用户名"]',
+                'input[placeholder*="密码"]', 
+                'input[placeholder*="验证码"]'
+            ]
+            
+            visible_login_elements = 0
+            for selector in login_form_selectors:
+                try:
+                    elements = self.page.locator(selector).all()
+                    for element in elements:
+                        if element.is_visible():
+                            visible_login_elements += 1
+                            break
+                except:
+                    continue
+            
+            # 如果没有可见的登录表单元素，说明已经登录
+            if visible_login_elements == 0:
+                self.logger.debug("未检测到可见的登录表单元素，判定为登录成功")
                 return "success"
+            
+            # 5. 最后尝试：检查是否能找到登录按钮
+            try:
+                login_btn = self.page.locator('text=登录').first
+                if login_btn.count() == 0 or not login_btn.is_visible():
+                    # 找不到登录按钮或不可见，很可能已登录
+                    self.logger.debug("未找到可见的登录按钮，判定为登录成功")
+                    return "success"
+            except:
+                pass
             
             return "unknown"
             

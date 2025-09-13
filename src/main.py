@@ -107,10 +107,38 @@ class AutoStudyApp:
             self.logger.error(f"显示统计信息失败: {str(e)}")
             print(f"显示统计信息时发生错误: {str(e)}")
     
-    def update_courses(self):
-        """获取并更新课程信息"""
+    def show_course_update_menu(self):
+        """显示课程更新菜单"""
+        while True:
+            print("\n" + "="*40)
+            print("      获取（更新）课程信息")
+            print("="*40)
+            print("1. 全部获取（更新）")
+            print("2. 必修课获取（更新）")
+            print("3. 选修课获取（更新）")
+            print("0. 返回主菜单")
+            print("="*40)
+            
+            choice = input("请选择操作: ").strip()
+            
+            if choice == '1':
+                self.update_all_courses()
+                break
+            elif choice == '2':
+                self.update_required_courses()
+                break
+            elif choice == '3':
+                self.update_elective_courses()
+                break
+            elif choice == '0':
+                break
+            else:
+                print("无效选择，请重新输入。")
+    
+    def update_all_courses(self):
+        """获取并更新所有课程信息"""
         try:
-            print("\n正在获取课程信息...")
+            print("\n正在获取所有课程信息...")
             
             if not self.course_parser:
                 self.course_parser = EnhancedCourseParser(self.login_manager.page)
@@ -126,9 +154,10 @@ class AutoStudyApp:
             required_count = len(courses_data['required'])
             elective_count = len(courses_data['elective'])
             
-            print(f"\n成功解析到课程信息:")
+            print(f"\n成功解析到所有课程信息:")
             print(f"  必修课: {required_count} 门")
             print(f"  选修课: {elective_count} 门")
+            print(f"  总计: {required_count + elective_count} 门")
             
             # 询问用户确认
             confirm = input("\n是否保存这些课程信息到数据库？(y/n): ").strip().lower()
@@ -136,15 +165,111 @@ class AutoStudyApp:
             if confirm in ['y', 'yes', '是']:
                 # 保存到数据库
                 if self.course_parser.save_courses_to_database(courses_data):
-                    print("课程信息已成功保存到数据库！")
+                    print("所有课程信息已成功保存到数据库！")
                 else:
                     print("保存课程信息时发生错误。")
             else:
                 print("取消保存课程信息。")
                 
         except Exception as e:
-            self.logger.error(f"更新课程信息失败: {str(e)}")
-            print(f"获取课程信息时发生错误: {str(e)}")
+            self.logger.error(f"更新所有课程信息失败: {str(e)}")
+            print(f"获取所有课程信息时发生错误: {str(e)}")
+    
+    def update_required_courses(self):
+        """获取并更新必修课信息"""
+        try:
+            print("\n正在获取必修课信息...")
+            
+            if not self.course_parser:
+                self.course_parser = EnhancedCourseParser(self.login_manager.page)
+            
+            # 解析必修课
+            required_courses = self.course_parser.parse_required_courses_enhanced()
+            
+            if not required_courses:
+                print("未能获取到必修课信息，请检查网络连接或登录状态。")
+                return
+            
+            # 显示解析结果
+            required_count = len(required_courses)
+            
+            print(f"\n成功解析到必修课信息:")
+            print(f"  必修课: {required_count} 门")
+            
+            # 显示课程列表
+            print("\n必修课列表:")
+            for i, course in enumerate(required_courses, 1):
+                print(f"  {i}. {course['course_name']}")
+            
+            # 询问用户确认
+            confirm = input("\n是否保存这些必修课信息到数据库？(y/n): ").strip().lower()
+            
+            if confirm in ['y', 'yes', '是']:
+                # 构造课程数据格式
+                courses_data = {
+                    'required': required_courses,
+                    'elective': []
+                }
+                
+                # 保存到数据库
+                if self.course_parser.save_courses_to_database(courses_data):
+                    print("必修课信息已成功保存到数据库！")
+                else:
+                    print("保存必修课信息时发生错误。")
+            else:
+                print("取消保存必修课信息。")
+                
+        except Exception as e:
+            self.logger.error(f"更新必修课信息失败: {str(e)}")
+            print(f"获取必修课信息时发生错误: {str(e)}")
+    
+    def update_elective_courses(self):
+        """获取并更新选修课信息"""
+        try:
+            print("\n正在获取选修课信息...")
+            
+            if not self.course_parser:
+                self.course_parser = EnhancedCourseParser(self.login_manager.page)
+            
+            # 解析选修课
+            elective_courses = self.course_parser.parse_elective_courses_enhanced()
+            
+            if not elective_courses:
+                print("未能获取到选修课信息，请检查网络连接或登录状态。")
+                return
+            
+            # 显示解析结果
+            elective_count = len(elective_courses)
+            
+            print(f"\n成功解析到选修课信息:")
+            print(f"  选修课: {elective_count} 门")
+            
+            # 显示课程列表
+            print("\n选修课列表:")
+            for i, course in enumerate(elective_courses, 1):
+                print(f"  {i}. {course['course_name']}")
+            
+            # 询问用户确认
+            confirm = input("\n是否保存这些选修课信息到数据库？(y/n): ").strip().lower()
+            
+            if confirm in ['y', 'yes', '是']:
+                # 构造课程数据格式
+                courses_data = {
+                    'required': [],
+                    'elective': elective_courses
+                }
+                
+                # 保存到数据库
+                if self.course_parser.save_courses_to_database(courses_data):
+                    print("选修课信息已成功保存到数据库！")
+                else:
+                    print("保存选修课信息时发生错误。")
+            else:
+                print("取消保存选修课信息。")
+                
+        except Exception as e:
+            self.logger.error(f"更新选修课信息失败: {str(e)}")
+            print(f"获取选修课信息时发生错误: {str(e)}")
     
     def start_auto_learning(self):
         """开始自动学习"""
@@ -157,37 +282,90 @@ class AutoStudyApp:
                 return
             
             print(f"\n找到 {len(incomplete_courses)} 门未完成的课程")
+            print("=" * 80)
             
-            # 显示将要学习的课程
-            print("即将学习的课程:")
-            for i, course in enumerate(incomplete_courses[:5], 1):  # 只显示前5门
-                course_type = "必修课" if course['course_type'] == 'required' else "选修课"
-                print(f"  {i}. [{course_type}] {course['course_name']} - 进度: {course['progress']:.1f}%")
+            # 显示所有未完成的课程供用户选择
+            print("可学习的课程列表:")
+            print(f"{'序号':<4} {'类型':<6} {'课程名称':<40} {'进度':<8} {'状态'}")
+            print("-" * 80)
             
-            if len(incomplete_courses) > 5:
-                print(f"  ... 还有 {len(incomplete_courses) - 5} 门课程")
+            for i, course in enumerate(incomplete_courses, 1):
+                course_type = "必修" if course['course_type'] == 'required' else "选修"
+                course_name = course['course_name'][:35] + "..." if len(course['course_name']) > 35 else course['course_name']
+                progress = f"{course['progress']:.1f}%"
+                status = "已完成" if course['progress'] >= 100.0 else "学习中" if course['progress'] > 0 else "未开始"
+                
+                print(f"{i:<4} {course_type:<6} {course_name:<40} {progress:<8} {status}")
             
-            # 询问用户确认
-            confirm = input("\n是否开始自动学习？(y/n): ").strip().lower()
+            print("=" * 80)
+            print("选择模式:")
+            print("  输入课程编号: 学习指定课程")
+            print("  输入 'all' 或 'a': 学习所有未完成课程")
+            print("  输入 'exit' 或直接回车: 返回主菜单")
             
-            if confirm not in ['y', 'yes', '是']:
-                print("取消自动学习。")
-                return
-            
-            print("\n开始自动学习...")
-            print("提示: 按 Ctrl+C 可以停止学习")
-            
-            # 初始化自动学习管理器
-            if not self.auto_study_manager:
-                self.auto_study_manager = AutoStudyManager(self.login_manager.page)
-            
-            # 开始自动学习
-            success = self.auto_study_manager.start_auto_study()
-            
-            if success:
-                print("\n自动学习任务完成！")
-            else:
-                print("\n自动学习过程中出现错误。")
+            while True:
+                choice = input("\n请输入您的选择: ").strip().lower()
+                
+                if choice in ['', 'exit', '退出']:
+                    print("返回主菜单。")
+                    return
+                    
+                elif choice in ['all', 'a', '全部']:
+                    # 学习所有课程
+                    confirm = input(f"\n确定要学习所有 {len(incomplete_courses)} 门未完成课程吗？(y/n): ").strip().lower()
+                    if confirm not in ['y', 'yes', '是']:
+                        continue
+                        
+                    print("\n开始批量学习...")
+                    print("提示: 按 Ctrl+C 可以停止学习")
+                    
+                    # 初始化自动学习管理器
+                    if not self.auto_study_manager:
+                        self.auto_study_manager = AutoStudyManager(self.login_manager.page)
+                    
+                    # 开始批量学习
+                    success = self.auto_study_manager.start_auto_study()
+                    
+                    if success:
+                        print("\n批量学习任务完成！")
+                    else:
+                        print("\n批量学习过程中出现错误。")
+                    break
+                    
+                else:
+                    # 检查是否是有效的课程编号
+                    try:
+                        course_index = int(choice) - 1
+                        if 0 <= course_index < len(incomplete_courses):
+                            selected_course = incomplete_courses[course_index]
+                            course_type = "必修课" if selected_course['course_type'] == 'required' else "选修课"
+                            
+                            print(f"\n选择的课程: [{course_type}] {selected_course['course_name']}")
+                            print(f"当前进度: {selected_course['progress']:.1f}%")
+                            
+                            confirm = input("\n确定要学习这门课程吗？(y/n): ").strip().lower()
+                            if confirm not in ['y', 'yes', '是']:
+                                continue
+                            
+                            print(f"\n开始学习: {selected_course['course_name']}")
+                            print("提示: 按 Ctrl+C 可以停止学习")
+                            
+                            # 初始化自动学习管理器
+                            if not self.auto_study_manager:
+                                self.auto_study_manager = AutoStudyManager(self.login_manager.page)
+                            
+                            # 学习单个课程
+                            success = self.auto_study_manager.study_single_course(selected_course)
+                            
+                            if success:
+                                print(f"\n课程学习完成: {selected_course['course_name']}")
+                            else:
+                                print(f"\n课程学习遇到错误: {selected_course['course_name']}")
+                            break
+                        else:
+                            print(f"无效的课程编号，请输入 1-{len(incomplete_courses)} 之间的数字")
+                    except ValueError:
+                        print("无效输入，请输入课程编号、'all' 或 'exit'")
                 
         except KeyboardInterrupt:
             print("\n\n用户中断学习...")
@@ -361,7 +539,7 @@ class AutoStudyApp:
                         self.running = False
                         
                     elif choice == '1':
-                        self.update_courses()
+                        self.show_course_update_menu()
                         
                     elif choice == '2':
                         self.start_auto_learning()

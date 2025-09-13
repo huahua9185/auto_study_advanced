@@ -2,8 +2,9 @@ from playwright.sync_api import Page
 import logging
 import re
 import time
-from urllib.parse import urljoin, urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs
 from typing import List, Dict
+import hashlib
 from config.config import Config
 from src.database import db
 
@@ -107,12 +108,16 @@ class CourseParser:
                             video_url = f"{Config.BASE_URL.rstrip('#/')}#/course_study?name={course_name}"
                         
                         if course_name:
+                            # 生成课程ID（如果没有从其他地方获取）
+                            course_id = hashlib.md5(f"required_{course_name}".encode('utf-8')).hexdigest()[:8]
+                            
                             course_info = {
                                 'course_name': course_name,
                                 'course_type': 'required',
                                 'progress': progress,
                                 'video_url': video_url,
-                                'user_course_id': user_course_id
+                                'user_course_id': user_course_id,
+                                'id': course_id  # 修复：添加缺失的 id 字段
                             }
                             courses.append(course_info)
                             self.logger.debug(f"添加必修课: {course_name} (进度: {progress}%)")
@@ -165,7 +170,8 @@ class CourseParser:
                                     'course_type': 'required',
                                     'progress': 0.0,
                                     'video_url': full_url,
-                                    'user_course_id': course_id if course_id_match else ''
+                                    'user_course_id': course_id if course_id_match else '',
+                                    'id': course_id if course_id_match else hashlib.md5(f"required_{text}".encode('utf-8')).hexdigest()[:8]
                                 }
                                 
                                 courses.append(course_info)
@@ -190,7 +196,7 @@ class CourseParser:
                         if len(cells) >= 2:
                             # 假设第一列或第二列是课程名称
                             course_name = ""
-                            for i, cell in enumerate(cells[:3]):
+                            for cell in cells[:3]:
                                 cell_text = cell.inner_text().strip()
                                 if cell_text and len(cell_text) > 5 and '继续学习' not in cell_text:
                                     course_name = cell_text
@@ -218,7 +224,8 @@ class CourseParser:
                                     'course_type': 'required',
                                     'progress': 0.0,
                                     'video_url': video_url,
-                                    'user_course_id': user_course_id
+                                    'user_course_id': user_course_id,
+                                    'id': user_course_id if user_course_id else hashlib.md5(f"required_{course_name}".encode('utf-8')).hexdigest()[:8]
                                 }
                                 courses.append(course_info)
                                 self.logger.debug(f"从表格添加必修课: {course_name}")
@@ -276,28 +283,30 @@ class CourseParser:
                         if progress_match:
                             progress = float(progress_match.group(1))
                     
-                    # 检查播放按钮是否存在（表示可以学习），所有行都应该有播放功能
-                    play_button = row.locator('td:has-text("播放")').first
-                    has_play_button = play_button.count() > 0
-                    
-                    # 构造一个临时的视频URL（因为这种页面结构可能需要JavaScript交互）
-                    # 实际的播放可能需要点击播放按钮来获取真实的URL
-                    video_url = f"{Config.BASE_URL.rstrip('#/')}#/elective_course_play?name={course_name}"
-                    
-                    # 生成一个基于课程名称的临时ID
-                    import hashlib
-                    user_course_id = hashlib.md5(course_name.encode('utf-8')).hexdigest()[:8]
+                    # 检查播放元素是否存在（选修课的"播放"是span元素，不是按钮）
+                    play_cell = row.locator('td.course_btn').first
+                    play_span = play_cell.locator('span:has-text("播放")').first if play_cell.count() > 0 else None
+                    has_play_element = play_span and play_span.count() > 0
+
+                    # 选修课需要通过点击播放元素来获取真实的视频URL
+                    # 这里先生成一个占位URL，实际使用时需要通过点击获取真实URL
+                    course_id = hashlib.md5(course_name.encode('utf-8')).hexdigest()[:8]
+                    user_course_id = hashlib.md5(course_name.encode('utf-8')).hexdigest()[8:16]
+
+                    # 标记需要点击获取真实URL的选修课
+                    video_url = f"#ELECTIVE_CLICK_TO_PLAY#{course_name}"
                     
                     course_info = {
                         'course_name': course_name,
                         'course_type': 'elective',
                         'progress': progress,
                         'video_url': video_url,
-                        'user_course_id': user_course_id
+                        'user_course_id': user_course_id,
+                        'id': course_id  # 修复：添加缺失的 id 字段
                     }
                     
                     courses.append(course_info)
-                    self.logger.debug(f"添加选修课: {course_name} (进度: {progress}%, 播放: {'是' if has_play_button else '否'})")
+                    self.logger.debug(f"添加选修课: {course_name} (进度: {progress}%, 播放: {'是' if has_play_element else '否'})")
                     
                 except Exception as e:
                     self.logger.warning(f"解析表格行时出错: {str(e)}")
@@ -340,7 +349,8 @@ class CourseParser:
                                     'course_type': 'elective',
                                     'progress': 0.0,
                                     'video_url': full_url,
-                                    'user_course_id': course_id
+                                    'user_course_id': course_id,
+                                    'id': course_id if course_id else hashlib.md5(f"elective_{text}".encode('utf-8')).hexdigest()[:8]
                                 }
                                 
                                 courses.append(course_info)
@@ -358,6 +368,98 @@ class CourseParser:
             
         self.logger.info(f"选修课解析完成，共获取到 {len(courses)} 门课程")
         return courses
+
+    def get_elective_real_video_url(self, course_name: str) -> str:
+        """通过点击播放获取选修课的真实视频URL"""
+        try:
+            # 访问选修课页面
+            self.page.goto(Config.ELECTIVE_COURSES_URL)
+            self.page.wait_for_load_state('domcontentloaded')
+            time.sleep(2)
+
+            # 查找对应课程的播放元素
+            table_rows = self.page.locator('tbody tr').all()
+
+            for row in table_rows:
+                try:
+                    # 获取课程名称
+                    title_cell = row.locator('td.td_title').first
+                    if title_cell.count() == 0:
+                        continue
+
+                    row_course_name = title_cell.inner_text().strip()
+                    if row_course_name != course_name:
+                        continue
+
+                    # 找到了对应的课程行，查找播放元素
+                    play_cell = row.locator('td.course_btn').first
+                    play_span = play_cell.locator('span:has-text("播放")').first
+
+                    if play_span.count() > 0:
+                        self.logger.info(f"找到选修课 '{course_name}' 的播放元素，准备点击")
+
+                        # 拦截导航请求
+                        navigation_url = None
+                        def capture_navigation(request):
+                            nonlocal navigation_url
+                            if 'video_page' in request.url:
+                                navigation_url = request.url
+                                self.logger.info(f"捕获到视频页面URL: {request.url}")
+
+                        self.page.on('request', capture_navigation)
+
+                        # 点击播放元素
+                        try:
+                            # 尝试直接点击span
+                            play_span.click(timeout=5000)
+                            # 等待页面响应
+                            time.sleep(3)
+
+                            # 如果页面发生了导航，获取当前URL
+                            current_url = self.page.url
+                            if 'video_page' in current_url:
+                                navigation_url = current_url
+
+                        except Exception as click_error:
+                            self.logger.warning(f"点击播放元素失败: {click_error}")
+                            # 尝试点击整个单元格
+                            try:
+                                play_cell.click(timeout=3000)
+                                time.sleep(2)
+                                current_url = self.page.url
+                                if 'video_page' in current_url:
+                                    navigation_url = current_url
+                            except:
+                                pass
+
+                        # 移除事件监听器
+                        try:
+                            self.page.remove_listener('request', capture_navigation)
+                        except:
+                            pass
+
+                        if navigation_url:
+                            self.logger.info(f"成功获取选修课 '{course_name}' 的真实URL: {navigation_url}")
+                            return navigation_url
+                        else:
+                            self.logger.warning(f"点击播放后未获取到有效URL，使用备用方案")
+                            # 使用备用URL格式
+                            course_id = hashlib.md5(course_name.encode('utf-8')).hexdigest()[:8]
+                            user_course_id = hashlib.md5(course_name.encode('utf-8')).hexdigest()[8:16]
+                            backup_url = f"{Config.BASE_URL.rstrip('#/')}#/video_page?id={course_id}&user_course_id={user_course_id}&name=%E5%AD%A6%E4%B9%A0%E4%B8%AD%E5%BF%83"
+                            self.logger.info(f"生成备用URL: {backup_url}")
+                            return backup_url
+
+                except Exception as e:
+                    self.logger.warning(f"处理课程行时出错: {str(e)}")
+                    continue
+
+            self.logger.error(f"未找到课程 '{course_name}' 的播放元素")
+            return ""
+
+        except Exception as e:
+            self.logger.error(f"获取选修课真实URL失败: {str(e)}")
+            return ""
     
     def _extract_course_info(self, element, course_type: str) -> Dict:
         """从课程元素中提取课程信息"""
@@ -494,7 +596,8 @@ class CourseParser:
                             'course_type': course_type,
                             'progress': 0.0,
                             'video_url': href,
-                            'user_course_id': ''
+                            'user_course_id': '',
+                            'id': hashlib.md5(f"{course_type}_{text}".encode('utf-8')).hexdigest()[:8]  # 添加缺失的 id 字段
                         }
                         
                         # 处理相对URL
@@ -506,6 +609,8 @@ class CourseParser:
                         query_params = parse_qs(parsed_url.query)
                         if 'user_course_id' in query_params:
                             course_info['user_course_id'] = query_params['user_course_id'][0]
+                            # 如果有真实的 user_course_id，则用它作为 id
+                            course_info['id'] = query_params['user_course_id'][0]
                         
                         courses.append(course_info)
                         

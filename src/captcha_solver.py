@@ -33,7 +33,7 @@ class CaptchaSolver:
         
     def solve_captcha_from_element(self, page: Page, captcha_selector: str) -> str:
         """
-        从页面元素中获取验证码图片并识别
+        从页面元素中获取验证码图片并识别（多重尝试版本）
         
         Args:
             page: Playwright页面对象
@@ -52,22 +52,109 @@ class CaptchaSolver:
             # 获取验证码图片
             screenshot = captcha_element.screenshot()
             
-            # 预处理图片以提高识别准确率
-            processed_image = self.preprocess_captcha_image(screenshot)
+            # 预处理图片 - 返回多个版本
+            processed_images = self.preprocess_captcha_image(screenshot)
             
-            # 使用ddddocr识别
-            raw_result = self.ocr.classification(processed_image)
+            # 对每个处理版本进行识别
+            results = []
+            raw_results = []
             
-            # 后处理修正识别结果
-            result = self._post_process_result(raw_result.strip())
+            for i, processed_image in enumerate(processed_images):
+                try:
+                    # 使用ddddocr识别
+                    raw_result = self.ocr.classification(processed_image)
+                    raw_results.append(raw_result)
+                    
+                    # 后处理修正识别结果
+                    result = self._post_process_result(raw_result.strip())
+                    
+                    if self._is_valid_captcha(result):
+                        results.append(result)
+                        self.logger.debug(f"方法{i+1}识别结果: {raw_result} -> {result}")
+                    else:
+                        self.logger.debug(f"方法{i+1}识别结果无效: {raw_result} -> {result}")
+                        
+                except Exception as e:
+                    self.logger.debug(f"方法{i+1}识别失败: {str(e)}")
+                    continue
             
-            self.logger.info(f"验证码识别结果: {raw_result} -> {result}")
-            return result
+            # 投票选择最佳结果
+            if results:
+                final_result = self._vote_best_result(results)
+                self.logger.info(f"验证码识别结果 (投票): {raw_results} -> {final_result}")
+                return final_result
             
+            # 如果所有方法都失败，尝试返回最长的有效结果
+            if raw_results:
+                for raw in raw_results:
+                    processed = self._post_process_result(raw.strip())
+                    if len(processed) >= 3:  # 至少3位数字
+                        self.logger.warning(f"使用备选结果: {raw} -> {processed}")
+                        return processed[:4]  # 截取前4位
+            
+            raise Exception("所有识别方法都失败")
+
         except Exception as e:
             self.logger.error(f"验证码识别失败: {str(e)}")
             raise
-    
+
+    def solve_captcha_from_bytes(self, image_bytes: bytes) -> str:
+        """
+        从图片字节数据中识别验证码
+
+        Args:
+            image_bytes: 图片的字节数据
+
+        Returns:
+            str: 识别的验证码文本
+        """
+        try:
+            # 预处理图片 - 返回多个版本
+            processed_images = self.preprocess_captcha_image(image_bytes)
+
+            # 对每个处理版本进行识别
+            results = []
+            raw_results = []
+
+            for i, processed_image in enumerate(processed_images):
+                try:
+                    # 使用ddddocr识别
+                    raw_result = self.ocr.classification(processed_image)
+                    raw_results.append(raw_result)
+
+                    # 后处理修正识别结果
+                    result = self._post_process_result(raw_result.strip())
+
+                    if self._is_valid_captcha(result):
+                        results.append(result)
+                        self.logger.debug(f"方法{i+1}识别结果: {raw_result} -> {result}")
+                    else:
+                        self.logger.debug(f"方法{i+1}识别结果无效: {raw_result} -> {result}")
+
+                except Exception as e:
+                    self.logger.debug(f"方法{i+1}识别失败: {str(e)}")
+                    continue
+
+            # 投票选择最佳结果
+            if results:
+                final_result = self._vote_best_result(results)
+                self.logger.info(f"验证码识别结果 (投票): {raw_results} -> {final_result}")
+                return final_result
+
+            # 如果所有方法都失败，尝试返回最长的有效结果
+            if raw_results:
+                for raw in raw_results:
+                    processed = self._post_process_result(raw.strip())
+                    if len(processed) >= 3:  # 至少3位数字
+                        self.logger.warning(f"使用备选结果: {raw} -> {processed}")
+                        return processed[:4]  # 截取前4位
+
+            raise Exception("所有识别方法都失败")
+
+        except Exception as e:
+            self.logger.error(f"从字节数据识别验证码失败: {str(e)}")
+            raise
+
     def solve_captcha_from_base64(self, base64_image: str) -> str:
         """
         从base64图片数据识别验证码
@@ -175,7 +262,7 @@ class CaptchaSolver:
     
     def _post_process_result(self, raw_result: str) -> str:
         """
-        后处理OCR识别结果，专门优吖4位数字验证码
+        增强版后处理OCR识别结果，专门优化4位数字验证码
         
         Args:
             raw_result: 原始识别结果
@@ -186,111 +273,290 @@ class CaptchaSolver:
         if not raw_result:
             return raw_result
             
-        # 精细调优的字符映射表，专门4位数字验证码
+        # 保守的字符映射表，避免冲突，只映射最确定的误识别
         char_mapping = {
-            # 数字0的所有可能误识别
-            'o': '0', 'O': '0', 'D': '0', 'Q': '0', 'a': '0', 'A': '0', 'U': '0', 'u': '0',
-            # 数字1的所有可能误识别
-            'l': '1', 'I': '1', 'i': '1', '|': '1', '!': '1', 't': '1', 'T': '1', 'j': '1',
-            # 数字2的所有可能误识别
-            'z': '2', 'Z': '2', 'R': '2', 'r': '2',
-            # 数字3的所有可能误识别
-            'E': '3', 'B': '3', 'm': '3', 'M': '3',
-            # 数字4的所有可能误识别
-            'A': '4', 'h': '4', 'y': '4', 'Y': '4', 'H': '4',
-            # 数字5的所有可能误识别
-            'S': '5', 's': '5', 'G': '5', 'g': '5',
-            # 数字6的所有可能误识别  
-            'G': '6', 'b': '6', 'C': '6', 'c': '6', 'e': '6',
-            # 数字7的所有可能误识别
-            'T': '7', '/': '7', '\\': '7', 'L': '7', 'F': '7', 'f': '7',
-            # 数字8的所有可能误识别
-            'B': '8', '&': '8', '@': '8',
-            # 数字9的所有可能误识别
-            'g': '9', 'q': '9', 'P': '9', 'p': '9', 'd': '9',
+            # 数字0的明确误识别（小写o、大写O、大写Q等）
+            'o': '0', 'O': '0', 'Q': '0',
+            # 数字1的明确误识别（小写l、大写I等）
+            'l': '1', 'I': '1', '|': '1',
+            # 数字2的明确误识别
+            'z': '2', 'Z': '2',
+            # 数字5的明确误识别
+            'S': '5', 's': '5',
+            # 其他明确的映射保持最小化以避免错误转换
         }
         
-        # 移除非数字字符
-        clean_result = ''.join(c for c in raw_result if c.isalnum())
+        # 保留数字和字母
+        clean_result = ''.join(c for c in raw_result if c.isalnum() or c in '()[]{}|!@#$%^&*-_=+/\\<>?')
+        
+        # 分步骤处理
+        step1_result = clean_result
         
         # 应用字符映射
-        corrected_result = ''.join(char_mapping.get(char, char) for char in clean_result)
+        step2_result = ''.join(char_mapping.get(char, char) for char in step1_result)
         
         # 只保留数字
-        corrected_result = ''.join(c for c in corrected_result if c.isdigit())
+        step3_result = ''.join(c for c in step2_result if c.isdigit())
         
-        # 如果结果不是4位，尝试补正
-        if len(corrected_result) == 0:
-            # 完全无数字，返回原始结果让上层重试
-            return raw_result
-        elif len(corrected_result) < 4:
-            # 如果缺少数字，返回空让上层重试
-            self.logger.warning(f"识别结果长度不足: {corrected_result} ({len(corrected_result)}位)")
-            return ''
-        elif len(corrected_result) > 4:
-            # 如果多了数字，取前4位
-            self.logger.warning(f"识别结果过长，截取前4位: {corrected_result} -> {corrected_result[:4]}")
-            corrected_result = corrected_result[:4]
+        # 智能补全逻辑
+        if len(step3_result) == 0:
+            # 如果完全没有数字，尝试更激进的转换
+            aggressive_result = self._aggressive_char_conversion(raw_result)
+            if aggressive_result:
+                step3_result = aggressive_result
+            else:
+                return ''  # 返回空字符串表示无法识别
+                
+        elif len(step3_result) < 4:
+            # 长度不足时的处理策略
+            if len(step3_result) == 3:
+                # 3位数字，尝试在前面补0或在后面补常见数字
+                # 基于样本分析，大多数情况是丢失了最后一位
+                self.logger.debug(f"3位结果，尝试智能补全: {step3_result}")
+                return step3_result  # 暂时返回3位，让上层判断
+            elif len(step3_result) == 2:
+                # 2位数字，返回空让重试
+                self.logger.debug(f"2位结果，返回空触发重试: {step3_result}")
+                return ''
+            else:
+                # 1位或其他情况
+                return ''
+                
+        elif len(step3_result) > 4:
+            # 如果多了数字，智能选择最可能的4位
+            if len(step3_result) == 5:
+                # 5位数字，可能是重复了某一位
+                # 找到重复的数字并移除
+                char_count = Counter(step3_result)
+                for char, count in char_count.items():
+                    if count > 1:
+                        # 移除多余的重复字符
+                        step3_result = step3_result.replace(char, char, count-1)
+                        break
+                        
+            # 如果还是太长，取前4位
+            if len(step3_result) > 4:
+                step3_result = step3_result[:4]
+                self.logger.debug(f"截取前4位: {raw_result} -> {step3_result}")
         
-        return corrected_result
+        return step3_result
     
-    def preprocess_captcha_image(self, image_data: bytes) -> bytes:
+    def _aggressive_char_conversion(self, raw_result: str) -> str:
         """
-        预处理验证码图片以提高识别准确率
+        激进的字符转换，当标准方法无法提取到数字时使用
+        """
+        # 对每个字符尝试转换为最相似的数字
+        result = []
+        for char in raw_result:
+            if char.isdigit():
+                result.append(char)
+            elif char.lower() in 'oaqd':
+                result.append('0')
+            elif char.lower() in 'iljt':
+                result.append('1')
+            elif char.lower() in 'zr':
+                result.append('2')
+            elif char.lower() in 'ebm':
+                result.append('3')
+            elif char.lower() in 'ahy':
+                result.append('4')
+            elif char.lower() in 'sg':
+                result.append('5')
+            elif char.lower() in 'gc':
+                result.append('6')
+            elif char.lower() in 'tf':
+                result.append('7')
+            elif char.lower() in 'b&':
+                result.append('8')
+            elif char.lower() in 'gqp':
+                result.append('9')
+                
+        final_result = ''.join(result)
+        return final_result[:4] if len(final_result) >= 4 else final_result
+    
+    def _vote_best_result(self, results: list) -> str:
+        """
+        投票选择最佳识别结果
+        
+        Args:
+            results: 多个识别结果列表
+            
+        Returns:
+            str: 最佳识别结果
+        """
+        if not results:
+            return ''
+            
+        if len(results) == 1:
+            return results[0]
+        
+        # 统计每个结果的出现次数
+        result_count = Counter(results)
+        
+        # 优先选择出现次数最多的结果
+        most_common = result_count.most_common(1)[0]
+        if most_common[1] > 1:
+            return most_common[0]
+        
+        # 如果所有结果都只出现一次，选择长度为4的结果
+        for result in results:
+            if len(result) == 4:
+                return result
+        
+        # 否则选择第一个结果
+        return results[0]
+    
+    def preprocess_captcha_image(self, image_data: bytes) -> list:
+        """
+        多种方法预处理验证码图片，返回多个处理版本以提高识别成功率
         
         Args:
             image_data: 原始图片数据
             
         Returns:
-            bytes: 处理后的图片数据
+            list: 多个处理后的图片数据列表
         """
+        processed_images = []
+        
         try:
             from PIL import ImageEnhance, ImageFilter, ImageOps
             import numpy as np
+            from scipy import ndimage
             
-            # 打开图片
-            image = Image.open(io.BytesIO(image_data))
+            # 打开原始图片
+            original_image = Image.open(io.BytesIO(image_data))
             
-            # 放大图片以提高识别精度 - 改为2倍以避免过度模糊
-            width, height = image.size
-            image = image.resize((width * 2, height * 2), Image.LANCZOS)
+            # 方法1：标准处理 - 去噪声 + 二值化
+            try:
+                image1 = original_image.copy()
+                
+                # 放大图片 3倍以提高识别精度
+                width, height = image1.size
+                image1 = image1.resize((width * 3, height * 3), Image.LANCZOS)
+                
+                # 转换为灰度图
+                if image1.mode != 'L':
+                    image1 = image1.convert('L')
+                
+                # 高斯滤波去噪
+                image1 = image1.filter(ImageFilter.GaussianBlur(radius=0.5))
+                
+                # 转换为numpy数组
+                img_array = np.array(image1)
+                
+                # 使用OTSU阈值进行二值化
+                from skimage.filters import threshold_otsu
+                threshold = threshold_otsu(img_array)
+                binary_array = np.where(img_array > threshold, 255, 0).astype(np.uint8)
+                
+                # 形态学操作去除噪点
+                from scipy.ndimage import binary_opening, binary_closing
+                binary_array = binary_opening(binary_array, structure=np.ones((2,2))).astype(np.uint8) * 255
+                binary_array = binary_closing(binary_array, structure=np.ones((2,2))).astype(np.uint8) * 255
+                
+                image1 = Image.fromarray(binary_array)
+                
+                # 保存处理后的图片
+                output1 = io.BytesIO()
+                image1.save(output1, format='PNG')
+                processed_images.append(output1.getvalue())
+                
+            except ImportError:
+                # 如果sklearn不可用，使用简化版本
+                image1 = original_image.copy()
+                width, height = image1.size
+                image1 = image1.resize((width * 3, height * 3), Image.LANCZOS)
+                
+                if image1.mode != 'L':
+                    image1 = image1.convert('L')
+                
+                img_array = np.array(image1)
+                threshold = np.mean(img_array) - 10  # 更严格的阈值
+                binary_array = np.where(img_array > threshold, 255, 0).astype(np.uint8)
+                image1 = Image.fromarray(binary_array)
+                
+                output1 = io.BytesIO()
+                image1.save(output1, format='PNG')
+                processed_images.append(output1.getvalue())
             
-            # 转换为灰度图
-            if image.mode != 'L':
-                image = image.convert('L')
+            # 方法2：增强对比度处理
+            try:
+                image2 = original_image.copy()
+                
+                # 放大图片
+                width, height = image2.size
+                image2 = image2.resize((width * 3, height * 3), Image.LANCZOS)
+                
+                # 转换为灰度图
+                if image2.mode != 'L':
+                    image2 = image2.convert('L')
+                
+                # 直方图均衡化
+                image2 = ImageOps.equalize(image2)
+                
+                # 强化对比度
+                enhancer = ImageEnhance.Contrast(image2)
+                image2 = enhancer.enhance(2.0)
+                
+                # 锐化
+                enhancer = ImageEnhance.Sharpness(image2)
+                image2 = enhancer.enhance(2.0)
+                
+                # 再次二值化
+                img_array = np.array(image2)
+                threshold = np.mean(img_array)
+                binary_array = np.where(img_array > threshold, 255, 0).astype(np.uint8)
+                image2 = Image.fromarray(binary_array)
+                
+                # 中值滤波去除孤立噪点
+                image2 = image2.filter(ImageFilter.MedianFilter(size=3))
+                
+                output2 = io.BytesIO()
+                image2.save(output2, format='PNG')
+                processed_images.append(output2.getvalue())
+                
+            except Exception as e2:
+                self.logger.debug(f"方法2处理失败: {e2}")
             
-            # 先进行自适应直方图均衡化
-            image = ImageOps.equalize(image)
+            # 方法3：保守处理 - 仅放大和轻微处理
+            try:
+                image3 = original_image.copy()
+                
+                # 适度放大
+                width, height = image3.size
+                image3 = image3.resize((width * 2, height * 2), Image.LANCZOS)
+                
+                # 转为灰度
+                if image3.mode != 'L':
+                    image3 = image3.convert('L')
+                
+                # 轻微增强对比度
+                enhancer = ImageEnhance.Contrast(image3)
+                image3 = enhancer.enhance(1.3)
+                
+                output3 = io.BytesIO()
+                image3.save(output3, format='PNG')
+                processed_images.append(output3.getvalue())
+                
+            except Exception as e3:
+                self.logger.debug(f"方法3处理失败: {e3}")
             
-            # 转换为numpy数组进行高级处理
-            img_array = np.array(image)
+            # 如果所有方法都失败，至少返回放大的原图
+            if not processed_images:
+                simple_image = original_image.copy()
+                width, height = simple_image.size
+                simple_image = simple_image.resize((width * 2, height * 2), Image.LANCZOS)
+                
+                output_simple = io.BytesIO()
+                simple_image.save(output_simple, format='PNG')
+                processed_images.append(output_simple.getvalue())
             
-            # 二值化处理 - 使用自适应阈值
-            threshold = np.mean(img_array)
-            binary_array = np.where(img_array > threshold, 255, 0).astype(np.uint8)
-            
-            # 转换回 PIL 图片
-            image = Image.fromarray(binary_array)
-            
-            # 形态学处理 - 去除小的噪点
-            image = image.filter(ImageFilter.MedianFilter(size=3))
-            
-            # 轻微锐化
-            enhancer = ImageEnhance.Sharpness(image)
-            image = enhancer.enhance(1.5)
-            
-            # 最终对比度调整
-            enhancer = ImageEnhance.Contrast(image)
-            image = enhancer.enhance(1.2)
-            
-            # 保存处理后的图片
-            output = io.BytesIO()
-            image.save(output, format='PNG')
-            return output.getvalue()
+            self.logger.debug(f"生成了 {len(processed_images)} 种预处理图片")
+            return processed_images
             
         except Exception as e:
             self.logger.warning(f"图片预处理失败: {str(e)}")
-            return image_data  # 返回原图
+            return [image_data]  # 返回原图
 
 # 全局验证码识别器实例
 captcha_solver = CaptchaSolver()
