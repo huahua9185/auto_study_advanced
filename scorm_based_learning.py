@@ -59,8 +59,8 @@ class SCORMBasedLearningSystem:
         """加载课程状态"""
         logger.info("📋 加载课程状态...")
 
-        course_id = 10598
-        user_course_id = 1988340
+        course_id = 10599  # 对应user_course_id=1988341的正确course_id
+        user_course_id = 1988341
 
         # 获取课程清单
         url = f"{self.client.base_url}/device/study_new!getManifest.do"
@@ -105,7 +105,7 @@ class SCORMBasedLearningSystem:
         self.session_time = 0
         self.total_duration = 0
 
-        user_course_id = 1988340
+        user_course_id = 1988341
 
         # 模拟真实的视频学习行为
         learning_scenarios = [

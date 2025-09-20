@@ -1,0 +1,30 @@
+{
+  "system": {
+    "name": "智能自动学习控制台系统",
+    "version": "1.0.0",
+    "debug_mode": false,
+    "auto_save_interval": 60,
+    "max_log_files": 10,
+    "log_level": "INFO"
+  },
+  "api": {
+    "base_url": "https://edu.nxgbjy.org.cn",
+    "timeout": 30,
+    "retry_times": 3,
+    "retry_delay": 2
+  },
+  "learning": {
+    "default_session_duration": 300,
+    "progress_save_interval": 30,
+    "auto_next_course": true,
+    "learning_speed": "normal",
+    "max_daily_learning_hours": 8
+  },
+  "ui": {
+    "theme": "default",
+    "show_progress_bar": true,
+    "show_timestamps": true,
+    "auto_refresh_interval": 5,
+    "confirm_dangerous_operations": true
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "login": {
+    "username": "640302198607120020",
+    "remember_login": true,
+    "auto_login": false,
+    "login_timeout": 30
+  },
+  "preferences": {
+    "show_welcome_message": true,
+    "auto_check_updates": true,
+    "save_learning_history": true,
+    "notification_enabled": true
+  },
+  "courses": {
+    "auto_fetch_on_startup": false,
+    "default_course_filter": "all",
+    "sort_by": "progress",
+    "sort_order": "asc"
+  },
+  "test": {
+    "key": "test_value"
+  }
+}
