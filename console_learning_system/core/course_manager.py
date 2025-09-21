@@ -6,6 +6,7 @@
 
 import json
 import sqlite3
+import os
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from datetime import datetime
@@ -17,7 +18,9 @@ from ..utils.logger_utils import setup_colored_logger
 from ..ui.display_utils import DisplayUtils
 from ..ui.input_utils import InputUtils
 
-logger = setup_colored_logger(__name__)
+# 检查是否在学习模式（安静模式）
+quiet_mode = os.environ.get('LEARNING_QUIET_MODE', 'false').lower() == 'true'
+logger = setup_colored_logger(__name__, console_output=not quiet_mode)
 
 
 class Course:

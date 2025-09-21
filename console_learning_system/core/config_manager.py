@@ -11,7 +11,9 @@ from pathlib import Path
 from typing import Dict, Any, Optional, List
 from ..utils.logger_utils import setup_colored_logger
 
-logger = setup_colored_logger(__name__)
+# 检查是否在学习模式（安静模式）
+quiet_mode = os.environ.get('LEARNING_QUIET_MODE', 'false').lower() == 'true'
+logger = setup_colored_logger(__name__, console_output=not quiet_mode)
 
 
 class ConfigManager:

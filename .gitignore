@@ -1,1 +1,60 @@
+# 日志文件
 *.log
+
+# Python 编译文件
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# 环境配置文件
+.env
+.venv
+env/
+venv/
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+.vscode/
+.idea/
+
+# 测试和调试文件
+test_*.py
+debug_*.py
+*_test.py
+*_debug.py
+
+# 数据文件
+*.db
+*.sqlite
+*.sqlite3
+
+# 截图和资源文件
+*.png
+*.jpg
+*.jpeg
+*.gif
+
+# JSON数据文件（除了配置文件）
+*_data.json
+*_result.json
+*_report.json
+*_log.json
+*_capture.json
+
+# HTML调试文件
+debug_*.html
+test_*.html
+
+# 备份文件
+*.bak
+*.backup
+*~
+
+# 输出目录
+output/
+logs/
+temp/
+tmp/
