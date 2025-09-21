@@ -5,6 +5,7 @@
 
 import asyncio
 import sys
+import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
@@ -604,6 +605,9 @@ class SCORMConsoleInterface:
         self.display.print_status(f"▶️ 开始学习: {selected_course.course_name}", "info")
 
         try:
+            # 启用安静模式以减少日志输出
+            os.environ['LEARNING_QUIET_MODE'] = 'true'
+
             # 开始学习
             session = self.learning_engine.learn_course(selected_course, max_time * 60)
 
@@ -612,6 +616,9 @@ class SCORMConsoleInterface:
 
         except Exception as e:
             self.display.print_status(f"❌ 学习过程出错: {e}", "error")
+        finally:
+            # 恢复正常日志模式
+            os.environ.pop('LEARNING_QUIET_MODE', None)
 
     def _learn_multiple_courses(self, learning_queue: List[Course]):
         """批量学习多个课程"""
@@ -641,6 +648,9 @@ class SCORMConsoleInterface:
         self.display.print_status(f"▶️ 开始批量学习 {len(filtered_courses)} 门课程", "info")
 
         try:
+            # 启用安静模式以减少日志输出
+            os.environ['LEARNING_QUIET_MODE'] = 'true'
+
             # 开始批量学习
             sessions = self.learning_engine.learn_multiple_courses(
                 courses=filtered_courses,
@@ -652,6 +662,9 @@ class SCORMConsoleInterface:
 
         except Exception as e:
             self.display.print_status(f"❌ 批量学习过程出错: {e}", "error")
+        finally:
+            # 恢复正常日志模式
+            os.environ.pop('LEARNING_QUIET_MODE', None)
 
     def _learn_all_courses(self, learning_queue: List[Course]):
         """自动学习所有未完成课程"""
@@ -671,10 +684,25 @@ class SCORMConsoleInterface:
         self.display.print_status(f"▶️ 开始自动学习，目标: {max_courses}门课程，时长: {total_time}分钟", "info")
 
         try:
+            # 启用安静模式以减少日志输出
+            os.environ['LEARNING_QUIET_MODE'] = 'true'
+
+            # 获取实际的学习队列
+            actual_queue = self.learning_engine.get_learning_queue(
+                course_type='required' if required_first else None,
+                max_courses=max_courses
+            )
+
+            if not actual_queue:
+                self.display.print_status("❌ 没有找到符合条件的待学习课程", "warning")
+                self.display.print_status(f"   过滤条件: 课程类型={'必修' if required_first else '所有'}, 最大数量={max_courses}", "info")
+                return
+
+            self.display.print_status(f"📚 找到 {len(actual_queue)} 门待学习课程", "info")
+
             # 开始自动学习
             sessions = self.learning_engine.learn_multiple_courses(
-                course_type='required' if required_first else None,
-                max_courses=max_courses,
+                courses=actual_queue,  # 直接传递课程列表
                 max_total_time=total_time * 60
             )
 
@@ -683,6 +711,9 @@ class SCORMConsoleInterface:
 
         except Exception as e:
             self.display.print_status(f"❌ 自动学习过程出错: {e}", "error")
+        finally:
+            # 恢复正常日志模式
+            os.environ.pop('LEARNING_QUIET_MODE', None)
 
     def _show_learning_result(self, session: LearningSession):
         """显示单个学习结果"""
@@ -1130,6 +1161,9 @@ class SCORMConsoleInterface:
             print("="*60)
 
             try:
+                # 启用安静模式以减少日志输出
+                os.environ['LEARNING_QUIET_MODE'] = 'true'
+
                 # 执行学习
                 course_type = 'required' if required_only else None
                 sessions = self.learning_engine.learn_multiple_courses(
@@ -1170,6 +1204,9 @@ class SCORMConsoleInterface:
 
         except Exception as e:
             self.display.print_status(f"❌ 一键学习失败: {e}", "error")
+        finally:
+            # 恢复正常日志模式
+            os.environ.pop('LEARNING_QUIET_MODE', None)
 
         self.input.wait_for_key()
 

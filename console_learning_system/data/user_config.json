@@ -19,5 +19,9 @@
   },
   "test": {
     "key": "test_value"
+  },
+  "learning": {
+    "max_duration_per_course": 1800,
+    "rest_between_courses": 5
   }
 }

@@ -173,6 +173,95 @@ class LearningEngine:
         if end_callback:
             self.on_session_end = end_callback
 
+    async def get_course_progress_from_api(self, target_course: Course) -> Optional[Dict[str, Any]]:
+        """从API获取特定课程的最新进度和状态"""
+        try:
+            # 获取登录管理器的API客户端
+            api_client = self.course_manager.login_manager.get_api_client()
+            if not api_client:
+                if self.current_session:
+                    self.current_session.add_log("  API客户端获取失败")
+                return None
+
+            # 获取所有课程的最新数据
+            all_courses = await api_client.get_all_courses()
+
+            if not all_courses:
+                if self.current_session:
+                    self.current_session.add_log("  API未返回课程列表")
+                return None
+
+            # 查找匹配的课程 - 使用更宽松的匹配
+            target_id = str(target_course.user_course_id)
+
+            for course_data in all_courses:
+                api_id = str(course_data.get('user_course_id', ''))
+
+                # 多种匹配方式
+                if api_id == target_id:
+                    # 返回包含progress和status的课程信息
+                    progress_value = float(course_data.get('progress', 0.0))  # API已经是0-100格式
+                    status_value = course_data.get('status', '')  # 字符串状态
+
+                    if self.current_session:
+                        self.current_session.add_log(f"  API课程匹配成功: ID={api_id}, 进度={progress_value:.1f}%")
+
+                    return {
+                        'progress': progress_value,
+                        'status': status_value,  # "completed"=已完成, "learning"=学习中
+                        'course_name': course_data.get('course_name', ''),
+                        'user_course_id': course_data.get('user_course_id')
+                    }
+
+            if self.current_session:
+                self.current_session.add_log(f"  API未找到匹配课程: target_id={target_id}")
+            return None
+
+        except Exception as e:
+            if self.current_session:
+                self.current_session.add_log(f"  获取API进度异常: {str(e)}")
+            return None
+
+    async def get_course_progress_from_sync_api(self, sync_client, target_course: Course) -> Optional[Dict[str, Any]]:
+        """从同步API客户端获取特定课程的最新进度和状态"""
+        try:
+            # 直接使用同步API客户端获取所有课程
+            all_courses = await sync_client.get_all_courses()
+
+            if not all_courses:
+                if self.current_session:
+                    self.current_session.add_log("  同步API未返回课程列表")
+                return None
+
+            # 查找匹配的课程
+            target_id = str(target_course.user_course_id)
+
+            for course_data in all_courses:
+                api_id = str(course_data.get('user_course_id', ''))
+
+                if api_id == target_id:
+                    progress_value = float(course_data.get('progress', 0.0))
+                    status_value = course_data.get('status', '')
+
+                    if self.current_session:
+                        self.current_session.add_log(f"  同步API课程匹配成功: ID={api_id}, 进度={progress_value:.1f}%")
+
+                    return {
+                        'progress': progress_value,
+                        'status': status_value,
+                        'course_name': course_data.get('course_name', ''),
+                        'user_course_id': course_data.get('user_course_id')
+                    }
+
+            if self.current_session:
+                self.current_session.add_log(f"  同步API未找到匹配课程: target_id={target_id}")
+            return None
+
+        except Exception as e:
+            if self.current_session:
+                self.current_session.add_log(f"  同步API获取进度异常: {str(e)}")
+            return None
+
     def get_learning_queue(self, course_type: str = None, max_courses: int = None) -> List[Course]:
         """获取学习队列"""
         courses = run_async_in_sync(self.course_manager.get_courses())
@@ -257,8 +346,15 @@ class LearningEngine:
 
             # 获取更新后的课程进度
             try:
-                updated_course = self.course_manager.get_course_by_id(course.course_id)
-                final_progress = updated_course.progress if updated_course else course.progress
+                # 使用当前会话记录的最终进度（来自API），而不是本地过期数据
+                if hasattr(self.current_session, 'final_progress') and self.current_session.final_progress is not None:
+                    final_progress = self.current_session.final_progress
+                    self.current_session.add_log(f"使用API最新进度: {final_progress:.1f}%")
+                else:
+                    # 备用方案：从本地数据获取
+                    updated_course = self.course_manager.get_course_by_id(course.course_id)
+                    final_progress = updated_course.progress if updated_course else course.progress
+                    self.current_session.add_log(f"使用本地进度: {final_progress:.1f}%")
             except Exception as e:
                 self.current_session.add_log(f"获取最终进度失败: {e}")
                 final_progress = course.progress
@@ -282,8 +378,8 @@ class LearningEngine:
         finally:
             # 只清理状态，不要修改会话的完成状态
             if self.is_learning:
-                self.should_stop = True
                 self.is_learning = False
+                # 注意：不要在这里设置should_stop=True，因为会中断批量学习
 
             # 保存会话到统计数据
             if self.current_session:
@@ -328,12 +424,17 @@ class LearningEngine:
 
             # 更新课程进度
             try:
-                updated_course = self.course_manager.get_course_by_id(course.course_id)
-                if updated_course:
-                    final_progress = updated_course.progress
+                # 使用会话记录的最终进度（来自API），而不是本地过期数据
+                if hasattr(session, 'final_progress') and session.final_progress is not None:
+                    final_progress = session.final_progress
+                    session.add_log(f"使用API最新进度: {final_progress:.1f}%")
                 else:
-                    final_progress = course.progress
-            except Exception:
+                    # 备用方案：从本地数据获取
+                    updated_course = self.course_manager.get_course_by_id(course.course_id)
+                    final_progress = updated_course.progress if updated_course else course.progress
+                    session.add_log(f"使用本地进度: {final_progress:.1f}%")
+            except Exception as e:
+                session.add_log(f"获取最终进度失败: {e}")
                 final_progress = course.progress
 
             if success:
@@ -697,15 +798,36 @@ class LearningEngine:
                             # 修复：根据scorm_based_learning.py的成功表现，HTTP 200就表示成功
                             self.current_session.add_log(f"  SCORM进度提交成功: {result}")
 
-                            # 触发进度更新回调
-                            if self.on_progress_update:
-                                # 重新获取课程进度
-                                try:
-                                    updated_course = self.course_manager.get_course_by_id(course.course_id)
-                                    if updated_course:
-                                        self.on_progress_update(course, updated_course.progress)
-                                except Exception:
-                                    pass
+                            # 获取API进度 - 无论是否有回调都要执行
+                            try:
+                                # 从API获取真实的进度和状态
+                                self.current_session.add_log(f"  获取API最新进度...")
+                                course_info = await self.get_course_progress_from_api(course)
+
+                                if course_info:
+                                    real_progress = course_info['progress']
+                                    course_status = course_info['status']
+
+                                    # 更新当前会话的最终进度
+                                    self.current_session.final_progress = real_progress
+
+                                    status_text = "已完成" if course_status == "completed" else "学习中"
+                                    self.current_session.add_log(f"  📈 API进度: {real_progress:.1f}% ({status_text})")
+
+                                    # 如果有回调，触发它
+                                    if self.on_progress_update:
+                                        self.on_progress_update(course, real_progress)
+                                        self.current_session.add_log(f"  ✅ 已触发进度回调")
+                                else:
+                                    # 如果API获取失败，使用估算进度
+                                    estimated_progress = min(100.0, course.progress + (i / len(learning_scenarios) * 10))
+                                    self.current_session.add_log(f"  📈 进度(估算): {estimated_progress:.1f}%")
+
+                                    # 如果有回调，触发它
+                                    if self.on_progress_update:
+                                        self.on_progress_update(course, estimated_progress)
+                            except Exception as e:
+                                self.current_session.add_log(f"  获取进度异常: {e}")
                         else:
                             self.current_session.add_log(f"  SCORM进度提交失败: HTTP {response.status}")
                 finally:
@@ -911,6 +1033,42 @@ class LearningEngine:
                     if response.status == 200:
                         result = await response.text()
                         self.current_session.add_log(f"  SCORM进度提交成功: {result}")
+
+                        # 获取API进度 - 无论是否有回调都要执行
+                        try:
+                            # 从API获取真实的进度和状态
+                            self.current_session.add_log(f"  获取API最新进度...")
+                            course_info = await self.get_course_progress_from_sync_api(sync_client, course)
+
+                            if course_info:
+                                real_progress = course_info['progress']
+                                course_status = course_info['status']
+
+                                # 更新当前会话的最终进度
+                                self.current_session.final_progress = real_progress
+
+                                status_text = "已完成" if course_status == "completed" else "学习中"
+                                self.current_session.add_log(f"  📈 API进度: {real_progress:.1f}% ({status_text})")
+
+                                # 如果有回调，触发它
+                                if self.on_progress_update:
+                                    self.on_progress_update(course, real_progress)
+                                    self.current_session.add_log(f"  ✅ 已触发进度回调")
+
+                                # 如果API显示已完成，提前结束学习
+                                if course_status == "completed":
+                                    self.current_session.add_log(f"  🎉 API显示课程已完成，结束学习")
+                                    break
+                            else:
+                                # 如果API获取失败，使用估算进度
+                                estimated_progress = min(100.0, course.progress + (total_scenarios * 0.5))
+                                self.current_session.add_log(f"  📈 进度(估算): {estimated_progress:.1f}%")
+
+                                # 如果有回调，触发它
+                                if self.on_progress_update:
+                                    self.on_progress_update(course, estimated_progress)
+                        except Exception as e:
+                            self.current_session.add_log(f"  获取进度异常: {e}")
                     else:
                         self.current_session.add_log(f"  SCORM进度提交失败: HTTP {response.status}")
 

@@ -10,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 
-def setup_logger(name: str, log_file: str = None, level: int = logging.INFO) -> logging.Logger:
+def setup_logger(name: str, log_file: str = None, level: int = logging.INFO, console_output: bool = True) -> logging.Logger:
     """
     设置日志记录器
 
@@ -18,6 +18,7 @@ def setup_logger(name: str, log_file: str = None, level: int = logging.INFO) -> 
         name: 日志记录器名称
         log_file: 日志文件路径（可选）
         level: 日志级别
+        console_output: 是否输出到控制台
 
     Returns:
         配置好的日志记录器
@@ -35,11 +36,12 @@ def setup_logger(name: str, log_file: str = None, level: int = logging.INFO) -> 
         datefmt='%Y-%m-%d %H:%M:%S'
     )
 
-    # 控制台处理器
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(level)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
+    # 控制台处理器 - 仅在启用时添加
+    if console_output:
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(level)
+        console_handler.setFormatter(formatter)
+        logger.addHandler(console_handler)
 
     # 文件处理器（如果指定了日志文件）
     if log_file:
@@ -74,7 +76,7 @@ class ColoredFormatter(logging.Formatter):
         return super().format(record)
 
 
-def setup_colored_logger(name: str, log_file: str = None, level: int = logging.INFO) -> logging.Logger:
+def setup_colored_logger(name: str, log_file: str = None, level: int = logging.INFO, console_output: bool = True) -> logging.Logger:
     """
     设置彩色日志记录器
 
@@ -82,6 +84,7 @@ def setup_colored_logger(name: str, log_file: str = None, level: int = logging.I
         name: 日志记录器名称
         log_file: 日志文件路径（可选）
         level: 日志级别
+        console_output: 是否输出到控制台
 
     Returns:
         配置好的彩色日志记录器
@@ -99,11 +102,12 @@ def setup_colored_logger(name: str, log_file: str = None, level: int = logging.I
         datefmt='%Y-%m-%d %H:%M:%S'
     )
 
-    # 控制台处理器（彩色）
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(level)
-    console_handler.setFormatter(colored_formatter)
-    logger.addHandler(console_handler)
+    # 控制台处理器（彩色）- 仅在启用时添加
+    if console_output:
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_handler.setLevel(level)
+        console_handler.setFormatter(colored_formatter)
+        logger.addHandler(console_handler)
 
     # 文件处理器（普通格式）
     if log_file:

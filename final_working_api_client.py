@@ -30,13 +30,12 @@ try:
 except ImportError:
     pass
 
-# 配置日志
+# 配置日志 - 只输出到文件，避免污染控制台
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('final_api_client.log'),
-        logging.StreamHandler()
+        logging.FileHandler('final_api_client.log')
     ]
 )
 logger = logging.getLogger(__name__)
