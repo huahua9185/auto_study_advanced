@@ -1304,12 +1304,12 @@ class SCORMConsoleInterface:
                 min(3, len(incomplete_courses))
             )
 
-            speed_multiplier = self.input.get_float(
-                "学习倍速 (1.0-5.0)",
-                1.0, 5.0, 2.0
+            speed_multiplier = InputUtils.get_number(
+                "学习倍速",
+                1.0, 5.0, 2.0, is_int=False
             )
 
-            max_total_time = self.input.get_number(
+            max_total_time = InputUtils.get_number(
                 "最大总学习时间(分钟)",
                 10, 480, 60
             ) * 60  # 转换为秒
@@ -1421,8 +1421,8 @@ class SCORMConsoleInterface:
             config.max_concurrent_courses = self.input.get_number(
                 "最大并发课程数", 1, 10, config.max_concurrent_courses
             )
-            config.speed_multiplier = self.input.get_float(
-                "默认学习倍速", 1.0, 5.0, config.speed_multiplier
+            config.speed_multiplier = InputUtils.get_number(
+                "默认学习倍速", 1.0, 5.0, config.speed_multiplier, is_int=False
             )
             config.progress_update_interval = self.input.get_number(
                 "进度更新间隔(秒)", 1, 30, config.progress_update_interval
@@ -1539,9 +1539,9 @@ class SCORMConsoleInterface:
             )
 
             if speed_choice == "custom":
-                target_speed = self.input.get_float(
-                    "自定义倍速 (1.0-5.0)",
-                    1.0, 5.0, 2.0
+                target_speed = InputUtils.get_number(
+                    "自定义倍速",
+                    1.0, 5.0, 2.0, is_int=False
                 )
             else:
                 target_speed = recommendations[speed_choice]
@@ -1641,11 +1641,11 @@ class SCORMConsoleInterface:
         print(f"  安全边际: {config.safety_margin:.2f}")
 
         if self.input.get_yes_no("\n是否修改配置?"):
-            config.max_speed_multiplier = self.input.get_float(
-                "最大倍速倍数", 1.0, 10.0, config.max_speed_multiplier
+            config.max_speed_multiplier = InputUtils.get_number(
+                "最大倍速倍数", 1.0, 10.0, config.max_speed_multiplier, is_int=False
             )
-            config.min_speed_multiplier = self.input.get_float(
-                "最小倍速倍数", 0.5, 2.0, config.min_speed_multiplier
+            config.min_speed_multiplier = InputUtils.get_number(
+                "最小倍速倍数", 0.5, 2.0, config.min_speed_multiplier, is_int=False
             )
             config.adaptive_speed = self.input.get_yes_no(
                 f"启用自适应速度? (当前: {'启用' if config.adaptive_speed else '禁用'})"
@@ -1653,8 +1653,8 @@ class SCORMConsoleInterface:
             config.progress_check_interval = self.input.get_number(
                 "进度检查间隔(秒)", 1, 10, config.progress_check_interval
             )
-            config.safety_margin = self.input.get_float(
-                "学习安全边际(0.90-0.99)", 0.90, 0.99, config.safety_margin
+            config.safety_margin = InputUtils.get_number(
+                "学习安全边际", 0.90, 0.99, config.safety_margin, is_int=False
             )
 
             self.turbo_engine.save_config()
