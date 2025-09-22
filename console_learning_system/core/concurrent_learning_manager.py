@@ -262,9 +262,10 @@ class ConcurrentLearningManager:
                 if self.progress_callback:
                     self.progress_callback(session.course, new_progress)
 
-            # 检查是否完成
-            if new_progress >= 99.0:
+            # 检查是否完成（基于虚拟进度或实际课程进度）
+            if new_progress >= 99.0 or session.course.progress >= 99.0:
                 session.complete()
+                session.add_log(f"课程学习完成 - 虚拟进度: {new_progress:.1f}%, 实际进度: {session.course.progress:.1f}%")
                 break
 
             # 短暂休眠
@@ -290,6 +291,22 @@ class ConcurrentLearningManager:
 
             if result:
                 session.add_log(f"进度提交成功 - 位置: {position:.0f}s, 进度: {session.current_progress:.1f}%")
+
+                # 更新课程对象的进度（同步本地数据）
+                try:
+                    # 强制刷新课程数据
+                    self.course_manager.fetch_courses_sync()
+                    updated_courses = await self.course_manager.get_courses()
+
+                    for updated_course in updated_courses:
+                        if updated_course.user_course_id == course.user_course_id:
+                            # 更新原始课程对象的进度
+                            old_progress = course.progress
+                            course.progress = updated_course.progress
+                            session.add_log(f"本地进度已同步: {old_progress:.1f}% → {course.progress:.1f}%")
+                            break
+                except Exception as e:
+                    session.add_log(f"进度同步失败: {str(e)}")
             else:
                 session.add_log("进度提交失败")
 
