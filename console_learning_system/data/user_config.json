@@ -23,5 +23,12 @@
   "learning": {
     "max_duration_per_course": 1800,
     "rest_between_courses": 5
+  },
+  "concurrent_learning": {
+    "max_concurrent_courses": 5,
+    "default_speed_multiplier": 1.0,
+    "progress_update_interval": 5,
+    "auto_balance_load": true,
+    "resource_limit_per_course": 0.3
   }
 }
