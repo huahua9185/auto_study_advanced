@@ -1314,12 +1314,14 @@ class SCORMConsoleInterface:
                 10, 480, 60
             ) * 60  # 转换为秒
 
-            course_type = self.input.get_choice(
-                "课程类型",
-                ["required", "elective", "all"],
-                ["必修课", "选修课", "全部"],
-                "required"
+            type_options = ["必修课", "选修课", "全部"]
+            type_values = ["required", "elective", "all"]
+            choice_index = InputUtils.get_menu_choice(
+                type_options,
+                "请选择课程类型",
+                allow_back=False
             )
+            course_type = type_values[choice_index - 1]  # 转换为对应值
 
             # 筛选课程
             if course_type != "all":
@@ -1531,12 +1533,14 @@ class SCORMConsoleInterface:
             print(f"  激进模式: {recommendations['aggressive']:.1f}x")
 
             # 选择倍速
-            speed_choice = self.input.get_choice(
-                "选择倍速模式",
-                ["conservative", "balanced", "aggressive", "custom"],
-                ["保守模式", "平衡模式", "激进模式", "自定义"],
-                "balanced"
+            speed_options = ["保守模式", "平衡模式", "激进模式", "自定义"]
+            speed_values = ["conservative", "balanced", "aggressive", "custom"]
+            choice_index = InputUtils.get_menu_choice(
+                speed_options,
+                "请选择倍速模式",
+                allow_back=False
             )
+            speed_choice = speed_values[choice_index - 1]  # 转换为对应值
 
             if speed_choice == "custom":
                 target_speed = InputUtils.get_number(
