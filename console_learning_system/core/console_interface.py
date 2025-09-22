@@ -318,6 +318,21 @@ class SCORMConsoleInterface:
 
     # ==================== 课程管理功能 ====================
 
+    def _ensure_logged_in(self) -> bool:
+        """确保用户已登录"""
+        if not self.login_manager.is_logged_in_sync():
+            self.display.print_status("❌ 请先登录", "error")
+            return False
+        return True
+
+    def _ensure_courses_available(self) -> bool:
+        """确保课程数据可用"""
+        courses = run_async_in_sync(self.course_manager.get_courses())
+        if not courses:
+            self.display.print_status("❌ 没有课程数据，请先获取课程信息", "error")
+            return False
+        return True
+
     def _fetch_courses(self):
         """获取课程列表"""
         self.display.print_header("📚 获取课程列表")
