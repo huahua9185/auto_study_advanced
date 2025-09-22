@@ -1741,18 +1741,18 @@ class SCORMConsoleInterface:
 
             # 配置超级学习
             print("\n⚙️ 超级学习配置:")
-            max_concurrent = self.input.get_number(
+            max_concurrent = InputUtils.get_number(
                 f"并发课程数 (1-{min(5, len(incomplete_courses))})",
                 1, min(5, len(incomplete_courses)),
                 min(3, len(incomplete_courses))
             )
 
-            speed_multiplier = self.input.get_float(
-                "倍速倍数 (1.5-4.0)",
-                1.5, 4.0, 2.5
+            speed_multiplier = InputUtils.get_number(
+                "倍速倍数",
+                1.5, 4.0, 2.5, is_int=False
             )
 
-            max_total_time = self.input.get_number(
+            max_total_time = InputUtils.get_number(
                 "最大学习时间(分钟)",
                 15, 240, 45
             ) * 60
@@ -1763,7 +1763,7 @@ class SCORMConsoleInterface:
             print(f"  时间限制: {max_total_time//60}分钟")
             print(f"  理论效率: {max_concurrent * speed_multiplier:.1f}x")
 
-            if not self.input.get_yes_no("\n🚀 启动超级学习模式?"):
+            if not InputUtils.get_yes_no("\n🚀 启动超级学习模式?"):
                 return
 
             # 设置回调
