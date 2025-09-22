@@ -194,11 +194,8 @@ class TurboLearningEngine:
             if not api_client:
                 return 2.0  # 默认2倍速
 
-            course_info = run_async_in_sync(api_client.get_course_info(course.user_course_id))
-            if not course_info:
-                return 2.0
-
-            video_duration = float(course_info.get('video_duration', 1800))
+            # 使用默认课程参数（API客户端没有get_course_info方法）
+            video_duration = float(course.duration) if hasattr(course, 'duration') and course.duration else 1800.0
             current_progress = course.progress
             remaining_progress = 100.0 - current_progress
 
@@ -260,14 +257,9 @@ class TurboLearningEngine:
                 return session
 
             # 获取课程信息
-            course_info = await api_client.get_course_info(course.user_course_id)
-            if not course_info:
-                session.add_log("无法获取课程信息")
-                session.status = "failed"
-                return session
-
-            video_duration = float(course_info.get('video_duration', 1800))
-            session.add_log(f"视频总时长: {video_duration:.0f}秒")
+            # 使用默认课程参数（API客户端没有get_course_info方法）
+            video_duration = float(course.duration) if hasattr(course, 'duration') and course.duration else 1800.0
+            session.add_log(f"视频总时长: {video_duration:.0f}秒（默认值）")
 
             # 开始倍速学习
             await self._perform_turbo_learning(session, api_client, video_duration, auto_adjust)
@@ -526,11 +518,8 @@ class TurboLearningEngine:
             if not api_client:
                 return {'conservative': 1.5, 'balanced': 2.0, 'aggressive': 3.0}
 
-            course_info = run_async_in_sync(api_client.get_course_info(course.user_course_id))
-            if not course_info:
-                return {'conservative': 1.5, 'balanced': 2.0, 'aggressive': 3.0}
-
-            video_duration = float(course_info.get('video_duration', 1800))
+            # 使用默认课程参数（API客户端没有get_course_info方法）
+            video_duration = float(course.duration) if hasattr(course, 'duration') and course.duration else 1800.0
             remaining_progress = 100.0 - course.progress
             remaining_time = video_duration * (remaining_progress / 100.0)
 
@@ -564,11 +553,8 @@ class TurboLearningEngine:
             if not api_client:
                 return {'error': '无法获取API客户端'}
 
-            course_info = run_async_in_sync(api_client.get_course_info(course.user_course_id))
-            if not course_info:
-                return {'error': '无法获取课程信息'}
-
-            video_duration = float(course_info.get('video_duration', 1800))
+            # 使用默认课程参数（API客户端没有get_course_info方法）
+            video_duration = float(course.duration) if hasattr(course, 'duration') and course.duration else 1800.0
             remaining_progress = 100.0 - course.progress
             remaining_video_time = video_duration * (remaining_progress / 100.0)
 

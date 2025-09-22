@@ -212,17 +212,11 @@ class ConcurrentLearningManager:
         course = session.course
         session.add_log(f"开始SCORM学习: {course.course_name}")
 
-        # 获取课程信息
-        course_info = await api_client.get_course_info(course.user_course_id)
-        if not course_info:
-            session.add_log("无法获取课程信息")
-            session.status = "failed"
-            return
+        # 使用默认课程参数（因为API客户端没有get_course_info方法）
+        session.add_log("使用默认课程参数进行学习")
 
-        session.add_log(f"课程信息获取成功，视频时长: {course_info.get('video_duration', 0)}秒")
-
-        # 计算学习参数
-        video_duration = float(course_info.get('video_duration', 1800))
+        # 计算学习参数（使用默认30分钟时长）
+        video_duration = float(course.duration) if hasattr(course, 'duration') and course.duration else 1800.0
         current_position = course.progress * video_duration / 100.0
         target_position = video_duration * 0.95  # 学习到95%
 
@@ -286,20 +280,12 @@ class ConcurrentLearningManager:
         try:
             course = session.course
 
-            # 构建SCORM数据
-            serialize_sco = {
-                "res01": {
-                    "lesson_location": str(int(position)),
-                    "session_time": str(int(duration)),
-                    "last_learn_time": datetime.now().strftime("%Y-%m-%d+%H:%M:%S")
-                },
-                "last_study_sco": "res01"
-            }
-
-            # 提交进度
+            # 提交进度（使用API客户端的实际方法签名）
             result = await api_client.submit_learning_progress(
                 user_course_id=course.user_course_id,
-                serialize_sco=serialize_sco
+                current_location=str(int(position)),
+                session_time=str(int(duration)),
+                duration=str(int(duration))
             )
 
             if result:
