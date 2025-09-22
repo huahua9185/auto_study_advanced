@@ -24,7 +24,6 @@ from .login_manager import LoginManager
 from .course_manager import CourseManager, Course
 from .learning_engine import LearningEngine, LearningSession
 from .concurrent_learning_manager import ConcurrentLearningManager, ConcurrentLearningSession
-from .turbo_learning_engine import TurboLearningEngine, TurboLearningSession
 
 
 class SCORMConsoleInterface:
@@ -39,7 +38,6 @@ class SCORMConsoleInterface:
 
         # 初始化并发学习管理器
         self.concurrent_manager = ConcurrentLearningManager(self.config_manager, self.course_manager)
-        self.turbo_engine = TurboLearningEngine(self.config_manager, self.course_manager)
 
         # UI工具
         self.display = DisplayUtils()
@@ -108,16 +106,10 @@ class SCORMConsoleInterface:
         concurrent_menu.add_item("1", "开始并发学习", self._start_concurrent_learning, "同时学习多门课程")
         concurrent_menu.add_item("2", "并发状态监控", self._monitor_concurrent_status, "查看并发学习状态")
         concurrent_menu.add_item("3", "并发配置设置", self._concurrent_settings, "配置并发学习参数")
-        concurrent_menu.add_item("4", "停止所有并发", self._stop_concurrent_learning, "停止所有并发学习")
+        concurrent_menu.add_item("4", "客户端池管理", self._manage_client_pool_sync, "管理API客户端池")
+        concurrent_menu.add_item("5", "停止所有并发", self._stop_concurrent_learning, "停止所有并发学习")
 
-        # 5. 倍速学习菜单
-        turbo_menu = Menu("⚡ 倍速学习", "单课程高效倍速学习")
-        turbo_menu.add_item("1", "开始倍速学习", self._start_turbo_learning, "倍速学习单门课程")
-        turbo_menu.add_item("2", "倍速推荐系统", self._turbo_recommendations, "获取倍速学习建议")
-        turbo_menu.add_item("3", "倍速配置设置", self._turbo_settings, "配置倍速学习参数")
-        turbo_menu.add_item("4", "停止倍速学习", self._stop_turbo_learning, "停止当前倍速学习")
-
-        # 6. 系统设置菜单
+        # 5. 系统设置菜单
         system_menu = Menu("⚙️ 系统设置", "系统配置和维护")
         system_menu.add_item("1", "系统配置", self._system_config, "修改系统参数")
         system_menu.add_item("2", "系统诊断", self._system_diagnosis, "检查系统状态")
@@ -129,11 +121,10 @@ class SCORMConsoleInterface:
         self.main_menu.add_item("2", "课程管理", submenu=course_menu, description="课程信息和进度管理")
         self.main_menu.add_item("3", "自动学习", submenu=learning_menu, description="传统单课程学习")
         self.main_menu.add_item("4", "并发学习", submenu=concurrent_menu, description="多课程同时学习")
-        self.main_menu.add_item("5", "倍速学习", submenu=turbo_menu, description="单课程高效学习")
-        self.main_menu.add_item("6", "系统设置", submenu=system_menu, description="系统配置和维护")
+        self.main_menu.add_item("5", "系统设置", submenu=system_menu, description="系统配置和维护")
         self.main_menu.add_separator()
         self.main_menu.add_item("8", "一键开始学习", self._quick_start_learning, "自动登录并开始学习")
-        self.main_menu.add_item("9", "超级学习模式", self._super_learning_mode, "并发+倍速学习")
+        self.main_menu.add_item("9", "超级学习模式", self._super_learning_mode, "高效并发学习")
 
     def run(self, quick_mode: bool = False):
         """运行控制台系统"""
@@ -319,10 +310,18 @@ class SCORMConsoleInterface:
     # ==================== 课程管理功能 ====================
 
     def _ensure_logged_in(self) -> bool:
-        """确保用户已登录"""
+        """确保用户已登录，如果未登录则自动使用默认凭据登录"""
         if not self.login_manager.is_logged_in_sync():
-            self.display.print_status("❌ 请先登录", "error")
-            return False
+            self.display.print_status("🔑 检测到未登录状态，正在自动登录...", "info")
+
+            # 尝试使用默认凭据自动登录
+            if self.login_manager.auto_login():
+                self.display.print_status("✅ 自动登录成功", "success")
+                return True
+            else:
+                self.display.print_status("❌ 自动登录失败，请手动登录", "error")
+                # 如果自动登录失败，可以尝试交互式登录
+                return self.login_manager.interactive_login()
         return True
 
     def _ensure_courses_available(self) -> bool:
@@ -567,9 +566,8 @@ class SCORMConsoleInterface:
         self.display.print_header("🎓 开始自动学习")
 
         try:
-            # 1. 检查登录状态
-            if not self.login_manager.is_logged_in_sync():
-                self.display.print_status("❌ 请先登录", "error")
+            # 1. 确保已登录
+            if not self._ensure_logged_in():
                 self.input.wait_for_key()
                 return
 
@@ -1304,11 +1302,6 @@ class SCORMConsoleInterface:
                 min(3, len(incomplete_courses))
             )
 
-            speed_multiplier = InputUtils.get_number(
-                "学习倍速",
-                1.0, 5.0, 2.0, is_int=False
-            )
-
             max_total_time = InputUtils.get_number(
                 "最大总学习时间(分钟)",
                 10, 480, 60
@@ -1318,7 +1311,7 @@ class SCORMConsoleInterface:
             type_values = ["required", "elective", "all"]
             choice_index = InputUtils.get_menu_choice(
                 type_options,
-                "请选择课程类型",
+                "请选择课程类型 (1-必修课 2-选修课 3-全部)",
                 allow_back=False
             )
             course_type = type_values[choice_index - 1]  # 转换为对应值
@@ -1360,7 +1353,6 @@ class SCORMConsoleInterface:
                 self.concurrent_manager.learn_courses_concurrently(
                     courses=incomplete_courses,
                     max_concurrent=max_concurrent,
-                    speed_multiplier=speed_multiplier,
                     max_total_time=max_total_time
                 )
             )
@@ -1383,23 +1375,57 @@ class SCORMConsoleInterface:
             return
 
         try:
+            start_monitor_time = time.time()
             while self.concurrent_manager.is_running:
                 self.display.clear_screen()
                 self.display.print_header("📊 实时并发学习监控")
 
+                # 统计信息
                 active_count = self.concurrent_manager.get_active_sessions_count()
-                print(f"活动并发数: {active_count}")
-                print(f"完成课程: {len(self.concurrent_manager.completed_sessions)}")
-                print(f"失败课程: {len(self.concurrent_manager.failed_sessions)}")
+                completed_count = len(self.concurrent_manager.completed_sessions)
+                failed_count = len(self.concurrent_manager.failed_sessions)
+                total_sessions = active_count + completed_count + failed_count
 
-                print("\n🎯 活动会话:")
-                for session_id, session in self.concurrent_manager.active_sessions.items():
-                    elapsed = (datetime.now() - session.start_time).total_seconds()
-                    print(f"  📚 {session.course.course_name[:30]}...")
-                    print(f"     进度: {session.current_progress:.1f}% (+{session.current_progress - session.initial_progress:.1f}%)")
-                    print(f"     倍速: {session.speed_multiplier:.1f}x, 时长: {elapsed:.0f}s")
+                print(f"📈 总体统计:")
+                print(f"  总会话数: {total_sessions}")
+                print(f"  活动中: {active_count} | 已完成: {completed_count} | 已失败: {failed_count}")
+                print(f"  成功率: {(completed_count / max(1, completed_count + failed_count)) * 100:.1f}%")
+                print(f"  监控时长: {time.time() - start_monitor_time:.0f}秒")
 
-                print(f"\n按 Ctrl+C 退出监控...")
+                # 客户端池状态
+                pool_size = len(self.concurrent_manager.client_pool)
+                available_clients = len(self.concurrent_manager.available_clients)
+                print(f"\n🏊‍♂️ 客户端池状态:")
+                print(f"  池大小: {pool_size} | 可用: {available_clients} | 使用中: {pool_size - available_clients}")
+
+                # 活动会话详情
+                if self.concurrent_manager.active_sessions:
+                    print(f"\n🎯 活动会话详情:")
+                    for session_id, session in self.concurrent_manager.active_sessions.items():
+                        elapsed = (datetime.now() - session.start_time).total_seconds()
+                        progress_gained = session.current_progress - session.initial_progress
+                        progress_rate = progress_gained / max(1, elapsed / 60)  # 每分钟进度
+
+                        print(f"  📚 {session.course.course_name[:35]}...")
+                        print(f"     进度: {session.initial_progress:.1f}% → {session.current_progress:.1f}% (+{progress_gained:.1f}%)")
+                        print(f"     时长: {elapsed:.0f}s | 速率: {progress_rate:.1f}%/min")
+                        print(f"     状态: {session.status} | 客户端: {session.assigned_client_id or '共享'}")
+
+                        # 显示最新日志
+                        if session.logs:
+                            latest_log = session.logs[-1]
+                            print(f"     最新: {latest_log[:50]}...")
+                        print()
+
+                # 最近完成的会话
+                if self.concurrent_manager.completed_sessions:
+                    recent_completed = self.concurrent_manager.completed_sessions[-3:]  # 显示最近3个
+                    print(f"✅ 最近完成 ({len(recent_completed)}/{completed_count}):")
+                    for session in recent_completed:
+                        progress_gained = session.current_progress - session.initial_progress
+                        print(f"  📚 {session.course.course_name[:35]}... (+{progress_gained:.1f}%)")
+
+                print(f"\n💡 按 Ctrl+C 退出监控 | 自动刷新间隔: 3秒")
                 time.sleep(3)
 
         except KeyboardInterrupt:
@@ -1415,16 +1441,19 @@ class SCORMConsoleInterface:
 
         print("当前配置:")
         print(f"  最大并发数: {config.max_concurrent_courses}")
-        print(f"  默认倍速: {config.speed_multiplier:.1f}x")
         print(f"  进度更新间隔: {config.progress_update_interval}秒")
         print(f"  自动负载均衡: {'启用' if config.auto_balance_load else '禁用'}")
+        print(f"  资源限制: {config.resource_limit_per_course:.1%}")
+
+        # 显示客户端池状态
+        print(f"\n📊 客户端池状态:")
+        print(f"  池大小: {len(self.concurrent_manager.client_pool)}")
+        print(f"  可用客户端: {len(self.concurrent_manager.available_clients)}")
+        print(f"  已分配客户端: {len(self.concurrent_manager.client_pool) - len(self.concurrent_manager.available_clients)}")
 
         if self.input.get_yes_no("\n是否修改配置?"):
             config.max_concurrent_courses = self.input.get_number(
                 "最大并发课程数", 1, 10, config.max_concurrent_courses
-            )
-            config.speed_multiplier = InputUtils.get_number(
-                "默认学习倍速", 1.0, 5.0, config.speed_multiplier, is_int=False
             )
             config.progress_update_interval = self.input.get_number(
                 "进度更新间隔(秒)", 1, 30, config.progress_update_interval
@@ -1435,6 +1464,63 @@ class SCORMConsoleInterface:
 
             self.concurrent_manager.save_config()
             self.display.print_status("配置已保存", "success")
+
+        self.input.wait_for_key()
+
+    def _manage_client_pool_sync(self):
+        """客户端池管理（同步版本）"""
+        self.display.print_header("🏊‍♂️ 客户端池管理")
+
+        # 显示客户端池状态
+        print(f"📊 客户端池状态:")
+        print(f"  池大小: {len(self.concurrent_manager.client_pool)}")
+        print(f"  可用客户端: {len(self.concurrent_manager.available_clients)}")
+        print(f"  已分配客户端: {len(self.concurrent_manager.client_pool) - len(self.concurrent_manager.available_clients)}")
+
+        options = [
+            "初始化客户端池",
+            "清理客户端池",
+            "测试客户端池",
+            "返回"
+        ]
+
+        choice = InputUtils.get_menu_choice(options, "请选择操作")
+
+        if choice == 1:  # 初始化客户端池
+            if self.concurrent_manager.client_pool:
+                if not self.input.get_yes_no("客户端池已存在，是否重新初始化?"):
+                    return
+                run_async_in_sync(self.concurrent_manager.cleanup_client_pool())
+
+            pool_size = self.input.get_number("客户端池大小", 1, 10, 3)
+            try:
+                run_async_in_sync(self.concurrent_manager.initialize_client_pool(pool_size))
+                self.display.print_status(f"✅ 客户端池初始化成功 ({pool_size}个客户端)", "success")
+            except Exception as e:
+                self.display.print_status(f"❌ 客户端池初始化失败: {e}", "error")
+
+        elif choice == 2:  # 清理客户端池
+            if self.concurrent_manager.client_pool:
+                run_async_in_sync(self.concurrent_manager.cleanup_client_pool())
+                self.display.print_status("✅ 客户端池已清理", "success")
+            else:
+                self.display.print_status("客户端池为空", "info")
+
+        elif choice == 3:  # 测试客户端池
+            if not self.concurrent_manager.client_pool:
+                self.display.print_status("客户端池未初始化", "warning")
+                self.input.wait_for_key()
+                return
+
+            print("🧪 测试客户端分配和回收...")
+            client = self.concurrent_manager.get_available_client()
+            if client:
+                print(f"✅ 成功获取客户端: {client.client_id}")
+                self.concurrent_manager.return_client(client.client_id)
+                print(f"✅ 成功归还客户端: {client.client_id}")
+                self.display.print_status("客户端池测试通过", "success")
+            else:
+                self.display.print_status("❌ 无法获取客户端", "error")
 
         self.input.wait_for_key()
 
@@ -1492,7 +1578,7 @@ class SCORMConsoleInterface:
                 progress_gained = session.current_progress - session.initial_progress
                 print(f"  ✅ {session.course.course_name}")
                 print(f"     进度: {session.initial_progress:.1f}% → {session.current_progress:.1f}% (+{progress_gained:.1f}%)")
-                print(f"     时长: {duration:.0f}秒, 倍速: {session.speed_multiplier:.1f}x")
+                print(f"     时长: {duration:.0f}秒")
 
         if failed_sessions:
             print(f"\n❌ 失败的课程:")
@@ -1501,228 +1587,9 @@ class SCORMConsoleInterface:
                 if session.logs:
                     print(f"     最后日志: {session.logs[-1]}")
 
-    # ==================== 倍速学习功能 ====================
-
-    def _start_turbo_learning(self):
-        """开始倍速学习"""
-        self.display.print_header("⚡ 单课程倍速学习")
-
-        try:
-            # 检查登录状态
-            if not self._ensure_logged_in():
-                return
-
-            # 确保有课程数据
-            if not self._ensure_courses_available():
-                return
-
-            # 选择要学习的课程
-            course = self._select_course_for_learning()
-            if not course:
-                return
-
-            # 获取倍速推荐
-            recommendations = self.turbo_engine.get_speed_recommendations(course)
-
-            print(f"\n🎯 选择的课程: {course.course_name}")
-            print(f"当前进度: {course.progress:.1f}%")
-
-            print(f"\n⚡ 倍速推荐:")
-            print(f"  保守模式: {recommendations['conservative']:.1f}x")
-            print(f"  平衡模式: {recommendations['balanced']:.1f}x")
-            print(f"  激进模式: {recommendations['aggressive']:.1f}x")
-
-            # 选择倍速
-            speed_options = ["保守模式", "平衡模式", "激进模式", "自定义"]
-            speed_values = ["conservative", "balanced", "aggressive", "custom"]
-            choice_index = InputUtils.get_menu_choice(
-                speed_options,
-                "请选择倍速模式",
-                allow_back=False
-            )
-            speed_choice = speed_values[choice_index - 1]  # 转换为对应值
-
-            if speed_choice == "custom":
-                target_speed = InputUtils.get_number(
-                    "自定义倍速",
-                    1.0, 5.0, 2.0, is_int=False
-                )
-            else:
-                target_speed = recommendations[speed_choice]
-
-            # 显示预估时间
-            estimation = self.turbo_engine.estimate_completion_time(course, target_speed)
-            if 'error' not in estimation:
-                print(f"\n⏱️ 时间预估:")
-                print(f"  原始学习时间: {estimation['remaining_video_time']/60:.1f}分钟")
-                print(f"  倍速学习时间: {estimation['total_estimated_time']/60:.1f}分钟")
-                print(f"  节省时间: {estimation['time_saved']/60:.1f}分钟")
-                print(f"  效率提升: {estimation['efficiency_gain']:.1f}%")
-
-            if not self.input.get_yes_no(f"\n确认以 {target_speed:.1f}x 倍速学习?"):
-                return
-
-            # 设置倍速回调
-            def on_turbo_progress(course, progress):
-                self.display.print_status(f"⚡ 倍速学习: {progress:.1f}%", "info")
-
-            def on_speed_change(old_speed, new_speed, reason):
-                self.display.print_status(f"🔄 速度调整: {old_speed:.1f}x → {new_speed:.1f}x ({reason})", "info")
-
-            self.turbo_engine.set_progress_callback(on_turbo_progress)
-            self.turbo_engine.set_speed_callback(on_speed_change)
-
-            # 开始倍速学习
-            self.display.print_status("⚡ 启动倍速学习引擎...", "info")
-
-            session = run_async_in_sync(
-                self.turbo_engine.learn_course_turbo(
-                    course=course,
-                    target_speed=target_speed,
-                    auto_adjust=True
-                )
-            )
-
-            # 显示结果
-            self._show_turbo_results(session)
-
-        except Exception as e:
-            self.display.print_status(f"❌ 倍速学习失败: {e}", "error")
-
-        self.input.wait_for_key()
-
-    def _turbo_recommendations(self):
-        """倍速推荐系统"""
-        self.display.print_header("🎯 倍速学习推荐系统")
-
-        try:
-            if not self._ensure_logged_in():
-                return
-
-            if not self._ensure_courses_available():
-                return
-
-            # 获取所有未完成课程
-            all_courses = run_async_in_sync(self.course_manager.get_courses())
-            incomplete_courses = [c for c in all_courses if c.progress < 100.0]
-
-            if not incomplete_courses:
-                self.display.print_status("🎉 所有课程已完成！", "success")
-                self.input.wait_for_key()
-                return
-
-            print("📋 倍速学习推荐报告")
-            print("="*50)
-
-            for i, course in enumerate(incomplete_courses[:10], 1):  # 限制显示前10门
-                recommendations = self.turbo_engine.get_speed_recommendations(course)
-                estimation = self.turbo_engine.estimate_completion_time(course, recommendations['balanced'])
-
-                print(f"\n{i}. {course.course_name}")
-                print(f"   当前进度: {course.progress:.1f}%")
-                print(f"   推荐倍速: {recommendations['balanced']:.1f}x")
-
-                if 'error' not in estimation:
-                    print(f"   预估时间: {estimation['total_estimated_time']/60:.1f}分钟")
-                    print(f"   节省时间: {estimation['time_saved']/60:.1f}分钟")
-
-        except Exception as e:
-            self.display.print_status(f"❌ 获取推荐失败: {e}", "error")
-
-        self.input.wait_for_key()
-
-    def _turbo_settings(self):
-        """倍速学习配置"""
-        self.display.print_header("⚙️ 倍速学习配置")
-
-        config = self.turbo_engine.config
-
-        print("当前配置:")
-        print(f"  最大倍速: {config.max_speed_multiplier:.1f}x")
-        print(f"  最小倍速: {config.min_speed_multiplier:.1f}x")
-        print(f"  自适应速度: {'启用' if config.adaptive_speed else '禁用'}")
-        print(f"  进度检查间隔: {config.progress_check_interval}秒")
-        print(f"  安全边际: {config.safety_margin:.2f}")
-
-        if self.input.get_yes_no("\n是否修改配置?"):
-            config.max_speed_multiplier = InputUtils.get_number(
-                "最大倍速倍数", 1.0, 10.0, config.max_speed_multiplier, is_int=False
-            )
-            config.min_speed_multiplier = InputUtils.get_number(
-                "最小倍速倍数", 0.5, 2.0, config.min_speed_multiplier, is_int=False
-            )
-            config.adaptive_speed = self.input.get_yes_no(
-                f"启用自适应速度? (当前: {'启用' if config.adaptive_speed else '禁用'})"
-            )
-            config.progress_check_interval = self.input.get_number(
-                "进度检查间隔(秒)", 1, 10, config.progress_check_interval
-            )
-            config.safety_margin = InputUtils.get_number(
-                "学习安全边际", 0.90, 0.99, config.safety_margin, is_int=False
-            )
-
-            self.turbo_engine.save_config()
-            self.display.print_status("配置已保存", "success")
-
-        self.input.wait_for_key()
-
-    def _stop_turbo_learning(self):
-        """停止倍速学习"""
-        self.display.print_header("⏹️ 停止倍速学习")
-
-        current_session = self.turbo_engine.get_current_session_status()
-
-        if not current_session:
-            self.display.print_status("当前没有运行的倍速学习任务", "info")
-            self.input.wait_for_key()
-            return
-
-        print(f"当前倍速学习:")
-        print(f"  课程: {current_session['course_name']}")
-        print(f"  当前倍速: {current_session['current_speed']:.1f}x")
-        print(f"  进度: {current_session['progress']:.1f}%")
-        print(f"  状态: {current_session['status']}")
-
-        if self.input.get_yes_no("确认停止倍速学习?"):
-            self.turbo_engine.stop_current_session()
-            self.display.print_status("倍速学习已停止", "success")
-
-        self.input.wait_for_key()
-
-    def _show_turbo_results(self, session: TurboLearningSession):
-        """显示倍速学习结果"""
-        print("\n" + "="*60)
-        print("⚡ 倍速学习结果")
-        print("="*60)
-
-        if session.status == "completed":
-            print("✅ 倍速学习成功完成!")
-        elif session.status == "failed":
-            print("❌ 倍速学习失败")
-        else:
-            print(f"⚠️ 倍速学习状态: {session.status}")
-
-        duration = (session.end_time - session.start_time).total_seconds() if session.end_time else 0
-        progress_gained = session.current_progress - session.initial_progress
-
-        print(f"\n📊 学习统计:")
-        print(f"  课程名称: {session.course.course_name}")
-        print(f"  目标倍速: {session.target_speed:.1f}x")
-        print(f"  实际用时: {duration:.0f}秒 ({duration/60:.1f}分钟)")
-        print(f"  进度提升: {session.initial_progress:.1f}% → {session.current_progress:.1f}% (+{progress_gained:.1f}%)")
-        print(f"  学习效率: {session.efficiency_ratio:.1f}%/分钟")
-
-        if session.speed_changes:
-            print(f"\n🔄 速度调整记录 ({len(session.speed_changes)}次):")
-            for i, change in enumerate(session.speed_changes[-5:], 1):  # 显示最后5次
-                print(f"  {i}. {change['old_speed']:.1f}x → {change['new_speed']:.1f}x ({change['reason']})")
-
-        if session.interaction_points:
-            print(f"\n🎯 交互点统计: {len(session.interaction_points)}个")
-
     def _super_learning_mode(self):
-        """超级学习模式：并发+倍速"""
-        self.display.print_header("🚀⚡ 超级学习模式")
+        """超级学习模式：高效并发学习"""
+        self.display.print_header("🚀 超级学习模式")
 
         try:
             if not self._ensure_logged_in():
@@ -1740,7 +1607,7 @@ class SCORMConsoleInterface:
                 self.input.wait_for_key()
                 return
 
-            print("🚀⚡ 超级学习模式将结合并发学习和倍速学习的优势")
+            print("🚀 超级学习模式将使用高效的并发学习策略")
             print(f"发现 {len(incomplete_courses)} 门未完成课程")
 
             # 配置超级学习
@@ -1751,11 +1618,6 @@ class SCORMConsoleInterface:
                 min(3, len(incomplete_courses))
             )
 
-            speed_multiplier = InputUtils.get_number(
-                "倍速倍数",
-                1.5, 4.0, 2.5, is_int=False
-            )
-
             max_total_time = InputUtils.get_number(
                 "最大学习时间(分钟)",
                 15, 240, 45
@@ -1763,16 +1625,15 @@ class SCORMConsoleInterface:
 
             print(f"\n📋 超级学习配置:")
             print(f"  并发课程: {max_concurrent}门")
-            print(f"  学习倍速: {speed_multiplier:.1f}x")
             print(f"  时间限制: {max_total_time//60}分钟")
-            print(f"  理论效率: {max_concurrent * speed_multiplier:.1f}x")
+            print(f"  并发效率: {max_concurrent}x")
 
             if not InputUtils.get_yes_no("\n🚀 启动超级学习模式?"):
                 return
 
             # 设置回调
             def super_progress_callback(course, progress):
-                self.display.print_status(f"🚀⚡ {course.course_name[:15]}... - {progress:.1f}%", "info")
+                self.display.print_status(f"🚀 {course.course_name[:15]}... - {progress:.1f}%", "info")
 
             self.concurrent_manager.set_progress_callback(super_progress_callback)
 
@@ -1783,13 +1644,12 @@ class SCORMConsoleInterface:
                 self.concurrent_manager.learn_courses_concurrently(
                     courses=incomplete_courses,
                     max_concurrent=max_concurrent,
-                    speed_multiplier=speed_multiplier,
                     max_total_time=max_total_time
                 )
             )
 
             # 显示超级学习结果
-            self._show_super_learning_results(sessions, max_concurrent, speed_multiplier)
+            self._show_super_learning_results(sessions, max_concurrent)
 
         except Exception as e:
             self.display.print_status(f"❌ 超级学习失败: {e}", "error")
@@ -1797,7 +1657,7 @@ class SCORMConsoleInterface:
         self.input.wait_for_key()
 
     def _show_super_learning_results(self, sessions: List[ConcurrentLearningSession],
-                                   concurrent: int, speed: float):
+                                   concurrent: int):
         """显示超级学习结果"""
         print("\n" + "="*60)
         print("🚀⚡ 超级学习模式结果")
@@ -1807,12 +1667,12 @@ class SCORMConsoleInterface:
         failed_count = len([s for s in sessions if s.status == "failed"])
 
         total_progress_gained = sum(s.current_progress - s.initial_progress for s in sessions)
-        theoretical_efficiency = concurrent * speed
+        concurrent_efficiency = concurrent
 
         print(f"✅ 完成课程: {completed_count}门")
         print(f"❌ 失败课程: {failed_count}门")
         print(f"📈 总进度提升: {total_progress_gained:.1f}%")
-        print(f"🚀 理论效率: {theoretical_efficiency:.1f}x")
+        print(f"🚀 并发效率: {concurrent_efficiency}x")
 
         if sessions:
             avg_session_time = sum((s.last_update_time - s.start_time).total_seconds() for s in sessions) / len(sessions)
@@ -1825,7 +1685,7 @@ class SCORMConsoleInterface:
             progress_gained = session.current_progress - session.initial_progress
 
             print(f"  {status_icon} {session.course.course_name}")
-            print(f"     进度: +{progress_gained:.1f}%, 时长: {duration:.0f}s, 倍速: {session.speed_multiplier:.1f}x")
+            print(f"     进度: +{progress_gained:.1f}%, 时长: {duration:.0f}s")
 
     def _select_course_for_learning(self) -> Optional[Course]:
         """选择要学习的课程"""

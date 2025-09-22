@@ -9,10 +9,25 @@ import json
 import logging
 import urllib.parse
 import base64
+import time
 from datetime import datetime
 import aiohttp
 from Crypto.Cipher import DES
 from Crypto.Util.Padding import pad
+import warnings
+import os
+
+# 抑制onnxruntime的警告
+os.environ['ONNXRUNTIME_DISABLE_WARNINGS'] = '1'
+warnings.filterwarnings('ignore', category=UserWarning, module='onnxruntime')
+
+# 设置onnxruntime日志级别
+try:
+    import onnxruntime
+    onnxruntime.set_default_logger_severity(3)  # 只显示ERROR级别日志
+except ImportError:
+    pass
+
 try:
     import ddddocr
 except ImportError:
@@ -43,11 +58,17 @@ logger = logging.getLogger(__name__)
 class FinalWorkingAPIClient:
     """最终工作版API客户端"""
 
-    def __init__(self):
+    def __init__(self, shared_cookies=None, client_id=None):
         self.base_url = "https://edu.nxgbjy.org.cn"
         self.session = None
+        # 初始化OCR（ddddocr会在内部使用onnxruntime）
         self.ocr = ddddocr.DdddOcr()
         self.token = "3ee5648315e911e7b2f200fff6167960"
+
+        # 多客户端支持
+        self.client_id = client_id or f"client_{id(self)}"
+        self.shared_cookies = shared_cookies  # 共享的认证cookie
+        self.is_logged_in = False
 
     async def __aenter__(self):
         await self.initialize()
@@ -58,7 +79,20 @@ class FinalWorkingAPIClient:
 
     async def initialize(self):
         """初始化session"""
+        # 创建cookie jar，如果有共享cookie则使用
+        cookie_jar = aiohttp.CookieJar()
+        if self.shared_cookies:
+            # 将共享cookie添加到新session中
+            from yarl import URL
+            for cookie in self.shared_cookies:
+                # 使用正确的cookie设置方法
+                cookie_jar.update_cookies(
+                    {cookie.key: cookie.value},
+                    response_url=URL('https://edu.nxgbjy.org.cn')
+                )
+
         self.session = aiohttp.ClientSession(
+            cookie_jar=cookie_jar,
             timeout=aiohttp.ClientTimeout(total=30),
             headers={
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:141.0) Gecko/20100101 Firefox/141.0',
@@ -124,9 +158,11 @@ class FinalWorkingAPIClient:
                         # 检查是否包含用户信息（登录成功的标志）
                         if result.get('user_id') or result.get('user'):
                             logger.info("✅ 登录成功")
+                            self.is_logged_in = True
                             return True
                         elif result.get('success'):
                             logger.info("✅ 登录成功")
+                            self.is_logged_in = True
                             return True
                         else:
                             logger.error(f"❌ 登录失败: {result.get('errorMsg', 'Unknown error')}")
@@ -135,6 +171,7 @@ class FinalWorkingAPIClient:
                         # 如果不是JSON，检查是否是成功重定向
                         if "成功" in content or "index" in content:
                             logger.info("✅ 登录成功（重定向）")
+                            self.is_logged_in = True
                             return True
                         else:
                             logger.error(f"❌ 登录响应异常: {content[:100]}...")
@@ -392,6 +429,32 @@ class FinalWorkingAPIClient:
         except Exception as e:
             logger.error(f"❌ 提交进度异常: {e}")
             return False
+
+    def get_auth_cookies(self):
+        """获取认证cookie用于共享"""
+        if self.session and self.is_logged_in:
+            return list(self.session.cookie_jar)
+        return None
+
+    async def create_child_client(self, client_id=None):
+        """创建共享认证状态的子客户端"""
+        if not self.is_logged_in:
+            raise RuntimeError("父客户端未登录，无法创建子客户端")
+
+        auth_cookies = self.get_auth_cookies()
+        child_client = FinalWorkingAPIClient(
+            shared_cookies=auth_cookies,
+            client_id=client_id or f"child_{int(time.time())}"
+        )
+
+        await child_client.initialize()
+        child_client.is_logged_in = True  # 继承登录状态
+        logger.info(f"✅ 创建子客户端: {child_client.client_id}")
+        return child_client
+
+    def set_login_status(self, status: bool):
+        """设置登录状态"""
+        self.is_logged_in = status
 
 async def test_final_api():
     """测试最终API客户端"""

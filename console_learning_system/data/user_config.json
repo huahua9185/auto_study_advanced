@@ -26,8 +26,7 @@
   },
   "concurrent_learning": {
     "max_concurrent_courses": 5,
-    "default_speed_multiplier": 1.0,
-    "progress_update_interval": 5,
+    "progress_update_interval": 30,
     "auto_balance_load": true,
     "resource_limit_per_course": 0.3
   }

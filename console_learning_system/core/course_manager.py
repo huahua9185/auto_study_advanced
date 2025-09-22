@@ -555,8 +555,11 @@ class CourseManager:
         """异步刷新课程进度"""
         try:
             if not self.login_manager.check_login_status():
-                logger.error("用户未登录，无法刷新课程进度")
-                return False
+                logger.info("检测到未登录状态，尝试自动登录...")
+                if not self.login_manager.auto_login():
+                    logger.error("自动登录失败，无法刷新课程进度")
+                    return False
+                logger.info("自动登录成功")
 
             api_client = self.login_manager.get_api_client()
             if not api_client:
